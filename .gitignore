@@ -1,6 +1,7 @@
 # Node Modules
 backend/asteroid_express_app/node_modules/
 frontend/asteroid_app/node_modules/
+frontent/asteroid_app/dist/
 
 npm-debug.log*
 yarn-debug.log*
