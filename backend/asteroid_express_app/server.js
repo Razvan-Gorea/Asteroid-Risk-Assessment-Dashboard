@@ -30,11 +30,4 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization']
 }
 
-const corsOptionsTesting = {
-  origin: true,
-  credentials: true,
-  methods: ['GET', 'POST', 'DELETE', 'PUT'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}
-
 app.use(cors(corsOptions))
