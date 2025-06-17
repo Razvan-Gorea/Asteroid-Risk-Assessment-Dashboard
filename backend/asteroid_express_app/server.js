@@ -21,10 +21,20 @@ app.listen(port, () => {
 })
 
 const corsOptions = {
-  origin: ['http://localhost:5173'],
+  origin: [
+    'http://localhost:5173',
+    'https://asteroid-risk-assessment-dashboard.onrender.com'
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'DELETE', 'PUT'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }
 
-app.use(cors(corsOptions))
+const corsOptionsTesting = {
+  origin: true,
+  credentials: true,
+  methods: ['GET', 'POST', 'DELETE', 'PUT'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}
+
+app.use(cors(corsOptionsTesting))
