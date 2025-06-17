@@ -1,8 +1,9 @@
-### Deployement with Render ###
+## Deployement with Render ##
 
-Static Service - Frontend React app
-Web Service - Backend Node.js + Express.js
+Static Service - Frontend React app<br>
+Web Service - Backend Node.js + Express.js<br>
 
-URL to Asteroid Dashboard [Here](https://asteroid-risk-assessment-dashboard.onrender.com/)
+Asteroid Dashboard Found [Here](https://asteroid-risk-assessment-dashboard.onrender.com/)
 
-### Local Installation Guide ###
+## Installation Guide ##
+
