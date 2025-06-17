@@ -180,7 +180,7 @@ GET /api/asteroids/:id         // Asteroid details
   - All links work
   - No broken functionality
   - Professional appearance
-  - Ready to submit!
+  - Ready to submit
 
 ---
 
@@ -238,7 +238,7 @@ GET /api/asteroids/:id         // Asteroid details
 | **Testing/Debugging** | 1 hour |
 | **Documentation** | 30 minutes |
 
-**Total: ~6-7 hours per day** (much more manageable!)
+**Total: ~6-7 hours per day**
 
 ---
 
