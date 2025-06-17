@@ -37,4 +37,4 @@ const corsOptionsTesting = {
   allowedHeaders: ['Content-Type', 'Authorization']
 }
 
-app.use(cors(corsOptionsTesting))
+app.use(cors(corsOptions))
