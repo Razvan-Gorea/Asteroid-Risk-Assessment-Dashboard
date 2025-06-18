@@ -1221,6 +1221,6 @@ app.get("/neo/:id", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
   console.log(`Cache enabled with 15-minute TTL`);
-  console.log(`  GET /cache/stats - View cache statistics`);
-  console.log(`  DELETE /cache/clear - Clear all cache (dev only)`);
+  console.log(`GET /cache/stats - View cache statistics`);
+  console.log(`DELETE /cache/clear - Clear all cache (dev only)`);
 });

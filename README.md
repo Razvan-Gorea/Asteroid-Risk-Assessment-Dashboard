@@ -1,11 +1,17 @@
-## Deployement with Render ##
+## Deployment with Render ##
 
 Static Service - Frontend React app<br>
 Web Service - Backend Node.js + Express.js<br>
 
 Asteroid Dashboard Found [Here](https://asteroid-risk-assessment-dashboard.onrender.com/)
 
-## Installation Guide ##
+## Local Installation Guide ##
+
+1. Get a NASA API KEY from [here](https://api.nasa.gov/)
+2. Clone this repository
+3. Go into both directories (frontend/backend) and install the necessary dependencies with `npm install`. You need to be within the same directorys as `package.json` for this to work. Both respective directories: `asteroid_app` and `asteroid_express_app`.
+4. To run the frontend use the command `npm run dev`. You need to be in the `asteroid_app` directory.
+5. To run the backend node server, go into the `asteroid_express_app` directory and run `npm start`.
 
 ## Available Endpoints ##
 
@@ -26,7 +32,7 @@ Asteroid Dashboard Found [Here](https://asteroid-risk-assessment-dashboard.onren
 ### Basic Neo Information Endpoints: ###
   GET /neo/today - Today's Near Earth Objects<br>
   GET /neo/feed?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD - NEOs for date range<br>
-  GET /neo/hazardous?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD - Potentially hazardous NEOs<br>
+  GET /neo/hazardous?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD - Potentially hazardous EOs<br>
   GET /neo/stats - NEO statistics from NASA<br>
   GET /neo/:id - Specific NEO details by ID<br>
   GET /neo/closest - 5 closest approaching NEOs today<br>
