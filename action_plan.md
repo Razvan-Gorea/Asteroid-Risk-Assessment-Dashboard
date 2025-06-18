@@ -25,30 +25,25 @@ asteroid-dashboard/
 ```
 - [x] Get NASA API key
 - [x] Set up basic Express server with CORS
-- [ ] Test NASA NeoWs API connection
+- [x] Test NASA NeoWs API connection
 - [x] Create .env files and basic configs
 
 #### Day 2: Backend API
-- [ ] Build 3 core endpoints:
-```javascript
-GET /api/asteroids/current     // Next 7 days
-GET /api/asteroids/stats       // Basic statistics
-GET /api/asteroids/:id         // Asteroid details
-```
+- [ ] Build Endpoints:
 - [ ] Implement basic risk scoring algorithm
 - [ ] Add simple caching (15min TTL)
 - [ ] Error handling for NASA API failures
-- [ ] Test with Postman
 
 ### Days 3-4: Frontend Foundation
 
 #### Day 3: React Setup & Components
 - [ ] Install dependencies: `axios`, `chart.js`, `react-chartjs-2`, `tailwindcss`
 - [ ] Create basic layout with header/main sections
-- [ ] Build reusable components:
+- [ ] Build reusable component(s):
   - `AsteroidCard` - shows individual asteroid info
-  - `LoadingSpinner` - for async states
-  - `ErrorMessage` - for error handling
+  - `BarChart` - Bar Chart for Neo(s) Info
+  - `PieChart` - Pie Chart for Neo(s) Info
+  - `ScatterPlot` - Scatter Plot Chart for Neo(s) Info
 - [ ] Set up API service layer
 - [ ] Basic responsive grid layout
 
@@ -65,15 +60,7 @@ GET /api/asteroids/:id         // Asteroid details
 
 ### Days 5-7: Essential Visualizations
 
-#### Day 5: Timeline Chart
-- [ ] **Approach Timeline**:
-  - Simple horizontal timeline showing next 30 days
-  - Color-coded dots by risk level
-  - Hover tooltips with basic info
-  - Click to open detail modal
-- [ ] Make it responsive and interactive
-
-#### Day 6: Risk Overview Charts
+#### Day 5: Risk Overview Charts
 - [ ] **Risk Distribution Pie Chart**:
   - Show % of asteroids by risk level (Low/Medium/High)
 - [ ] **Size vs Distance Scatter Plot**:
@@ -82,7 +69,7 @@ GET /api/asteroids/:id         // Asteroid details
   - Simple, clean design
 - [ ] Both charts clickable to filter main list
 
-#### Day 7: Polish & Mobile
+#### Day 6-7: Polish & Mobile
 - [ ] Make all components mobile-responsive
 - [ ] Add dark theme (mission control feel)
 - [ ] Improve typography and spacing
