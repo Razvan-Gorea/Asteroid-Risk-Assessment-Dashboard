@@ -22,7 +22,7 @@ This API provides comprehensive asteroid data, risk assessments, and visualizati
 
 ## Available Endpoints
 
-### Risk Assessment
+## Risk Assessment
 
 Potential threats and get detailed risk scoring
 
