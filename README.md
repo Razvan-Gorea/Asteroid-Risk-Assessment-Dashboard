@@ -23,7 +23,7 @@ Asteroid Dashboard Found [Here](https://asteroid-risk-assessment-dashboard.onren
   GET /neo/simple - Clean table/card data (today)<br>
   GET /neo/simple/:date - Clean table/card data for specific date<br>
 
-### Basic Neo Date: ###
+### Basic Neo Information Endpoints: ###
   GET /neo/today - Today's Near Earth Objects<br>
   GET /neo/feed?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD - NEOs for date range<br>
   GET /neo/hazardous?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD - Potentially hazardous NEOs<br>
