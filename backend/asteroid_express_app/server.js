@@ -161,6 +161,7 @@ app.get('/neo/:id', async (req, res) => {
   }
 })
 
+
 // Get closest approaching NEOs for today
 app.get('/neo/closest', async (req, res) => {
   try {
@@ -821,6 +822,7 @@ app.get('/neo/highest-risk', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch highest risk NEO data' })
   }
 })
+
 app.get('/neo/simple', async (req, res) => {
   try {
     const date = new Date().toISOString().split('T')[0]
