@@ -10,7 +10,7 @@ Asteroid Dashboard Found [Here](https://asteroid-risk-assessment-dashboard.onren
 1. Clone this repository
 2. Get a NASA API Key from [here](https://api.nasa.gov/)
 3. Go into the `asteroid_express_app` directory and create a .env file. You need a `PORT` secret variable and a `NASA_API_KEY` secret variable. The `PORT` variable will dictate which local host port the backend will listen on.
-3. Go into both directories (frontend/backend) and install the necessary dependencies with `npm install`. You need to be within the same directorys as `package.json` for this to work. Both respective directories: `asteroid_app` and `asteroid_express_app`.
+3. Go into both directories `asteroid_app` and `asteroid_express_app` and install the necessary dependencies with `npm install`. This two directories are sub-directories of `frontend/` and `backend/`.
 4. To run the frontend use the command `npm run dev`. You need to be in the `asteroid_app` directory.
 5. To run the backend node server, go into the `asteroid_express_app` directory and run `npm start`.
 
