@@ -1,243 +1,185 @@
-# NASA Asteroid Risk Assessment Dashboard - Streamlined 2-Week Plan
+# NASA Asteroid Risk Assessment Dashboard - 11-Day Sprint Plan
 
-## Project Overview
+## 11-Day Frontend Sprint: Days 1-11
+**Focus: Build a frontend that showcases your sophisticated backend**
 
-**Goal**: Build a focused, polished asteroid dashboard that showcases technical skills without overcomplicating.
+### Days 1-2: Foundation & API Integration (CRITICAL)
+#### Day 1: Project Setup & API Layer
+- [ ] **Create React app structure** (if not done)
+- [ ] **Build complete API integration layer**:
+  - `services/asteroidAPI.js` - Main API service class
+  - `services/apiConstants.js` - Endpoints and configuration
+  - `hooks/` - Custom hooks for all major data types
+- [ ] **Test API connectivity** - Verify all 15+ endpoints work
+- [ ] **Basic routing setup** with React Router
+- [ ] **Environment configuration** (.env files)
 
-**Core Concept**: Clean, modern dashboard showing current asteroid threats with essential visualizations
-- **Frontend**: React with 2-3 key visualizations
-- **Backend**: Simple Express API with NASA NeoWs integration
-- **Focus**: Quality over quantity - nail the fundamentals
+#### Day 2: Core Components Foundation
+- [ ] **Layout Components**:
+  - Header with navigation
+  - Sidebar for filters
+  - Main content area
+  - Responsive grid system
+- [ ] **Basic UI Components**:
+  - LoadingSpinner, ErrorMessage, Card
+  - Button, Modal components
+- [ ] **First API integration test** - Display today's NEOs
 
----
+### Days 3-4: Dashboard Core (HIGH PRIORITY)
+#### Day 3: Main Dashboard
+- [ ] **Risk-Centric Dashboard** using `/neo/risk-assessment`:
+  - Risk summary cards (Critical/High/Moderate/Low/Minimal counts)
+  - Today's highest risk asteroid spotlight
+  - Key statistics overview
+- [ ] **NEO List Component** using `/neo/simple`:
+  - Sortable table (risk, size, distance, velocity)
+  - Basic search and filtering
+  - Click for details functionality
 
-## Week 1: MVP Foundation
+#### Day 4: Detail Views & Modals
+- [ ] **NEO Detail Modal** using `/neo/:id`:
+  - Complete asteroid information
+  - Risk breakdown with visual indicators
+  - Approach history
+- [ ] **Risk Assessment Display**:
+  - Visual risk scoring (progress bars/charts)
+  - Risk factor explanations
+  - Color-coded risk levels
 
-### Days 1-2: Setup & Backend Core
+### Days 5-6: Essential Visualizations (CORE FEATURES)
+#### Day 5: Primary Charts
+- [ ] **Size Distribution Pie Chart** using `/charts/size-distribution`:
+  - Interactive pie chart with categories
+  - Click to filter main list
+- [ ] **Risk Distribution Chart**:
+  - Show percentage in each risk category
+  - Visual risk level representation
 
-#### Day 1: Project Setup
-- [x] Initialize project structure
-```
-asteroid-dashboard/
-├── frontend/    # Create React App
-├── backend/     # Express server
-└── README.md
-```
-- [x] Get NASA API key
-- [x] Set up basic Express server with CORS
-- [x] Test NASA NeoWs API connection
-- [x] Create .env files and basic configs
-
-#### Day 2: Backend API
-- [ ] Build Endpoints:
-- [ ] Implement basic risk scoring algorithm
-- [ ] Add simple caching (15min TTL)
-- [ ] Error handling for NASA API failures
-
-### Days 3-4: Frontend Foundation
-
-#### Day 3: React Setup & Components
-- [ ] Install dependencies: `axios`, `chart.js`, `react-chartjs-2`, `tailwindcss`
-- [ ] Create basic layout with header/main sections
-- [ ] Build reusable component(s):
-  - `AsteroidCard` - shows individual asteroid info
-  - `BarChart` - Bar Chart for Neo(s) Info
-  - `PieChart` - Pie Chart for Neo(s) Info
-  - `ScatterPlot` - Scatter Plot Chart for Neo(s) Info
-- [ ] Set up API service layer
-- [ ] Basic responsive grid layout
-
-#### Day 4: Core Dashboard View
-- [ ] **Main Dashboard Page**:
-  - Overview cards (total asteroids, highest risk, next approach)
-  - Simple asteroid list with sorting
-  - Basic search/filter by name
-- [ ] **Asteroid Detail Modal**:
-  - Click asteroid card to see details
-  - Show all key metrics in clean format
-- [ ] Connect frontend to backend APIs
-- [ ] Add loading states and error handling
-
-### Days 5-7: Essential Visualizations
-
-#### Day 5: Risk Overview Charts
-- [ ] **Risk Distribution Pie Chart**:
-  - Show % of asteroids by risk level (Low/Medium/High)
-- [ ] **Size vs Distance Scatter Plot**:
-  - X-axis: miss distance, Y-axis: estimated diameter
+#### Day 6: Advanced Charts
+- [ ] **Distance vs Size Scatter Plot** using `/charts/distance-size`:
+  - Interactive scatter with hover details
   - Color by risk level
-  - Simple, clean design
-- [ ] Both charts clickable to filter main list
+  - Clickable points for details
+- [ ] **Timeline Chart** using `/charts/timeline`:
+  - 7-day asteroid activity
+  - Multiple metrics display
 
-#### Day 6-7: Polish & Mobile
-- [ ] Make all components mobile-responsive
-- [ ] Add dark theme (mission control feel)
-- [ ] Improve typography and spacing
-- [ ] Add smooth transitions
-- [ ] Test on different screen sizes
+### Day 7: Polish & Mobile (FINALIZATION)
+- [ ] **Mobile Responsiveness**:
+  - All components work on mobile
+  - Touch-friendly interactions
+  - Collapsible navigation
+- [ ] **Visual Polish**:
+  - Consistent styling
+  - Loading states
+  - Error handling UI
+  - Dark theme implementation
 
 ---
 
-## Week 2: Polish & Deploy
-
-### Days 8-9: Enhanced Features
-
-#### Day 8: Improved UX
-- [ ] **Better Filtering System**:
-  - Filter by risk level, size category, date range
-  - Clear active filters display
-  - Reset filters button
-- [ ] **Sorting Options**:
-  - Sort by date, risk score, size, distance
-  - Visual sort indicators
-- [ ] **Real-time Updates**:
-  - Simple auto-refresh every 30 minutes
-  - "Last updated" timestamp
-  - Manual refresh button
-
-#### Day 9: Data Enhancement
-- [ ] **Risk Calculator Component**:
-  - Simple sliders for asteroid parameters
+## Days 8-9: Advanced Features (DIFFERENTIATION)
+### Day 8: Interactive Features
+- [ ] **Advanced Filtering System**:
+  - Date range picker
+  - Risk level multi-select
+  - Size category filters
+  - Hazardous-only toggle
+- [ ] **Interactive Risk Calculator**:
+  - Sliders for asteroid parameters
   - Real-time risk score calculation
-  - Educational - show how size/distance affects risk
-- [ ] **Comparison Feature**:
-  - Select 2-3 asteroids to compare side-by-side
-  - Simple table format
-- [ ] **Statistics Dashboard**:
-  - Average approach distance
-  - Largest asteroid this month
-  - Most dangerous upcoming approach
+  - Educational explanations
 
-### Days 10-11: Testing & Optimization
-
-#### Day 10: Testing & Bug Fixes
-- [ ] Write basic React tests for key components
-- [ ] Test API error scenarios
-- [ ] Cross-browser testing (Chrome, Firefox, Safari)
-- [ ] Mobile device testing
-- [ ] Fix any bugs found
-- [ ] Performance check (lazy loading if needed)
-
-#### Day 11: Code Quality
-- [ ] Code cleanup and refactoring
-- [ ] Add PropTypes or TypeScript basics
-- [ ] Improve error boundaries
-- [ ] Add more comprehensive error messages
-- [ ] Code comments for complex logic
-- [ ] Final responsive design tweaks
-
-### Days 12-14: Complete & Polish
-
-#### Day 12: Feature Complete + Deploy
-**FEATURE FREEZE - No new functionality after today!**
-- [ ] Deploy backend to Railway/Render (1-2 hours)
-- [ ] Deploy frontend to Vercel/Netlify (1 hour)
-- [ ] Set up environment variables in production
-- [ ] Test production deployment works end-to-end
-- [ ] Write basic README.md with setup instructions
-- [ ] Take initial screenshots of working app
-
-#### Day 13: Polish & Documentation
-**POLISH ONLY - No new features, just improvements**
-- [ ] UI/UX touch-ups:
-  - Improve spacing, colors, typography
-  - Add loading animations if missing
-  - Fix any visual inconsistencies
-- [ ] Enhanced README.md:
-  - Add screenshots and feature descriptions
-  - Document API endpoints
-  - Add technology stack section
-- [ ] Code cleanup:
-  - Remove console.logs and debug code
-  - Add comments to complex functions
-  - Clean up unused imports
-
-#### Day 14: Final Touch-ups & Submission
-**SUBMISSION READY - Final details only**
-- [ ] Final visual polish:
-  - Consistent button styles
-  - Perfect responsive behavior
-  - Professional color scheme
-- [ ] Submission materials:
-  - Create demo GIFs/videos
-  - Final README review
-  - Test app works in incognito/different browsers
-  - Prepare submission email
-- [ ] Quality check:
-  - All links work
-  - No broken functionality
-  - Professional appearance
-  - Ready to submit
+### Day 9: Enhanced UX
+- [ ] **NEO Comparison Tool**:
+  - Multi-select asteroids
+  - Side-by-side comparison
+  - Risk factor analysis
+- [ ] **Performance Features**:
+  - Auto-refresh with countdown
+  - Cache status display
+  - Manual refresh controls
 
 ---
 
-## Simplified Tech Stack
+## Days 10-11: Production Ready (DEPLOYMENT)
+### Day 10: Testing & Optimization
+- [ ] **Comprehensive Testing**:
+  - All API integrations work
+  - Error scenarios handled
+  - Mobile/desktop compatibility
+  - Performance optimization
+- [ ] **Code Quality**:
+  - Clean up console logs
+  - Add loading states everywhere
+  - Consistent error handling
+  - Professional code comments
 
-### Frontend
-```json
-{
-  "dependencies": {
-    "react": "^18.2.0",
-    "axios": "^1.3.0",
-    "chart.js": "^4.2.0",
-    "react-chartjs-2": "^5.2.0",
-    "tailwindcss": "^3.2.0"
-  }
-}
-```
-
-### Backend
-```json
-{
-  "dependencies": {
-    "express": "^4.18.0",
-    "cors": "^2.8.0",
-    "dotenv": "^16.0.0",
-    "node-cache": "^5.1.0"
-  }
-}
-```
-
-## Core Features (Guaranteed Achievable)
-
-### ✅ Must-Have Features
-1. **Clean Dashboard Layout** - Professional, responsive design
-2. **Asteroid List with Search/Filter** - Core functionality
-3. **Risk Visualization** - 2-3 simple but effective charts
-4. **Detail Views** - Click to see asteroid details
-5. **Mobile Responsive** - Works on all devices
-6. **Real NASA Data** - Live API integration
-7. **Error Handling** - Graceful failures
-
-### 🎯 Nice-to-Have (Time Permitting)
-1. **Risk Calculator** - Simple educational tool
-2. **Comparison Feature** - Compare 2 asteroids
-3. **Dark Theme** - Mission control aesthetic
-4. **Auto-refresh** - Keep data current
+### Day 11: Deploy & Final Polish
+- [ ] **Production Deployment**:
+  - Deploy frontend (Vercel/Netlify)
+  - Connect to deployed backend
+  - Environment variables setup
+  - End-to-end testing
+- [ ] **Final Polish**:
+  - Screenshots for documentation
+  - README.md completion
+  - Demo preparation
+  - Last-minute UI tweaks
 
 ---
 
-## Realistic Daily Time Commitment
+## Critical Path for Success (11 Days)
 
-| Activity | Time |
-|----------|------|
-| **Core Development** | 5-6 hours |
-| **Testing/Debugging** | 1 hour |
-| **Documentation** | 30 minutes |
+### Days 1-3: Foundation (CANNOT SKIP)
+**Day 1**: API Integration Layer + Basic React Setup
+**Day 2**: Core Layout + First API Connection Test  
+**Day 3**: Risk Dashboard + NEO List (Core Value Proposition)
 
-**Total: ~6-7 hours per day**
+### Days 4-6: Essential Features (CORE PRODUCT)
+**Day 4**: Detail Views + Risk Visualization
+**Day 5**: 2-3 Essential Charts (Size, Risk, Scatter)
+**Day 6**: Mobile Responsive + Basic Polish
+
+### Days 7-8: Enhanced Features (DIFFERENTIATION)
+**Day 7**: Deploy Early Version + Advanced Filtering
+**Day 8**: Risk Calculator + Timeline Charts
+
+### Days 9-11: Production Ready (FINALIZATION)
+**Day 9**: Testing + Bug Fixes + UX Polish
+**Day 10**: Final Deployment + Performance Optimization
+**Day 11**: Documentation + Demo Preparation
+
+---
+
+## Emergency Time-Saving Strategies
+
+### Pre-built Solutions to Use:
+- **Chart.js or Recharts** - Don't build charts from scratch
+- **Tailwind CSS** - Rapid styling without custom CSS
+- **React Router** - Standard routing solution
+- **Axios** - Simplified HTTP requests
+
+### Code Shortcuts:
+- **Copy-paste chart configurations** - Adapt examples rather than writing from scratch
+- **Use component libraries** - Material-UI or Ant Design for complex components
+- **Template-based layouts** - Start with responsive grid templates
+
+### Deployment Shortcuts:
+- **Vercel/Netlify** - Zero-config deployment from GitHub
+- **Environment variables** - Use platform UI instead of complex configs
 
 ---
 
-## Success Criteria (Achievable Goals)
+## What Makes This Project Portfolio-Worthy
 
-By week 2 end:
+Your backend already demonstrates:
+1. **Advanced API Design** - 15+ endpoints with intelligent data processing
+2. **Custom Algorithms** - 5-factor risk assessment system
+3. **Performance Engineering** - Sophisticated caching with monitoring
+4. **Production Considerations** - Error handling, CORS, environment configs
 
-- ✅ **Professional-looking dashboard** that works perfectly
-- ✅ **2-3 solid visualizations** that are actually useful
-- ✅ **Mobile-responsive design** that looks great everywhere
-- ✅ **Real NASA data integration** with proper error handling
-- ✅ **Clean, documented codebase** that shows good practices
-- ✅ **Deployed application** that actually works in production
-
----
+The frontend needs to show:
+1. **Professional UI/UX** - Clean, responsive, intuitive design
+2. **Data Visualization Excellence** - Interactive, meaningful charts
+3. **Real-time Integration** - Seamless API connectivity
+4. **Mobile-First Design** - Works perfectly on all devices
