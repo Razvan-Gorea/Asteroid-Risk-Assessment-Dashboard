@@ -7,8 +7,7 @@
 #### Day 1: Project Setup & API Layer
 - [ ] **Create React app structure** (if not done)
 - [ ] **Build complete API integration layer**:
-  - `services/asteroidAPI.js` - Main API service class
-  - `services/apiConstants.js` - Endpoints and configuration
+  - `api/client.js` - API layer
   - `hooks/` - Custom hooks for all major data types
 - [ ] **Test API connectivity** - Verify all 15+ endpoints work
 - [ ] **Basic routing setup** with React Router
@@ -164,21 +163,15 @@
 - **Use component libraries** - Material-UI or Ant Design for complex components
 - **Template-based layouts** - Start with responsive grid templates
 
-### Deployment Shortcuts:
-- **Vercel/Netlify** - Zero-config deployment from GitHub
-- **Environment variables** - Use platform UI instead of complex configs
-
 ---
 
-## What Makes This Project Portfolio-Worthy
-
-Your backend already demonstrates:
+Backend demonstrates:
 1. **Advanced API Design** - 15+ endpoints with intelligent data processing
 2. **Custom Algorithms** - 5-factor risk assessment system
 3. **Performance Engineering** - Sophisticated caching with monitoring
 4. **Production Considerations** - Error handling, CORS, environment configs
 
-The frontend needs to show:
+Frontend needs to show:
 1. **Professional UI/UX** - Clean, responsive, intuitive design
 2. **Data Visualization Excellence** - Interactive, meaningful charts
 3. **Real-time Integration** - Seamless API connectivity

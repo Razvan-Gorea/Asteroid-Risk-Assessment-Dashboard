@@ -208,7 +208,6 @@ app.get("/neo/stats", async (req, res) => {
 });
 
 // Get closest approaching NEOs for today
-// Get closest approaching NEOs for today
 app.get("/neo/closest", async (req, res) => {
   try {
     const today = new Date().toISOString().split("T")[0];
