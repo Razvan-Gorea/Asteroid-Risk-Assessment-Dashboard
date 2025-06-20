@@ -105,15 +105,15 @@ All dates should be in **YYYY-MM-DD** format (e.g., `2024-06-18`)
 
 ```bash
 # Get today's risk assessment
-curl /neo/risk-assessment
+curl 'https://asteroid-dashboard-backend.onrender.com/neo/risk-assessment'
 
-# Find dangerous asteroids this week
-curl /neo/hazardous?start_date=2024-06-18&end_date=2024-06-25
+# Find dangerous asteroids for a specified week (Max 7 days apart only)
+curl 'https://asteroid-dashboard-backend.onrender.com/neo/hazardous?start_date=2024-06-13&end_date=2024-06-20'
 
 # Get chart data for a specific date
-curl /neo/charts/size-distribution/2024-06-15
+curl 'https://asteroid-dashboard-backend.onrender.com/neo/charts/size-distribution/2024-06-15'
 
 # Timeline for dashboard (30 days)
-curl /neo/charts/timeline?days=30
+curl 'https://asteroid-dashboard-backend.onrender.com/neo/charts/timeline?days=30'
 ```
 

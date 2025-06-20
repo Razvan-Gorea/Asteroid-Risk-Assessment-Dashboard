@@ -250,12 +250,14 @@ function getBaseURL() {
     'http://localhost:3000'
     // Set Fallback value to Backend Render URL for production
   );  
-   
-  console.log('=== getBaseURL Debug ===');
-  console.log('import.meta.env?.VITE_API_BASE_URL:', import.meta.env?.VITE_API_BASE_URL);
-  console.log('process.env?.VITE_API_BASE_URL:', process.env?.VITE_API_BASE_URL);
-  console.log('Final result:', result);
-  console.log('========================');
+  
+  //Useful to see if secrets are working
+
+  // console.log('=== getBaseURL Debug ===');
+  // console.log('import.meta.env?.VITE_API_BASE_URL:', import.meta.env?.VITE_API_BASE_URL);
+  // console.log('process.env?.VITE_API_BASE_URL:', process.env?.VITE_API_BASE_URL);
+  // console.log('Final result:', result);
+  // console.log('========================');
 
   return result;
 }

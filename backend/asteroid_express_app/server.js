@@ -54,29 +54,33 @@ app.get("/", (req, res) => {
   res.send("Custom API with Caching");
 });
 
-// Cache statistics endpoint
-app.get("/cache/stats", (req, res) => {
-  const stats = cache.getStats();
-  const keys = cache.keys();
+// Cache statistics endpoint (for development)
+// Commented out in production for obivious reasons
 
-  res.json({
-    cache_stats: {
-      keys_count: keys.length,
-      hits: stats.hits,
-      misses: stats.misses,
-      hit_rate: stats.hits / (stats.hits + stats.misses) || 0,
-      keys: keys,
-    },
-    ttl_seconds: 900,
-    ttl_minutes: 15,
-  });
-});
+// app.get("/cache/stats", (req, res) => {
+//   const stats = cache.getStats();
+//   const keys = cache.keys();
+
+//   res.json({
+//     cache_stats: {
+//       keys_count: keys.length,
+//       hits: stats.hits,
+//       misses: stats.misses,
+//       hit_rate: stats.hits / (stats.hits + stats.misses) || 0,
+//       keys: keys,
+//     },
+//     ttl_seconds: 900,
+//     ttl_minutes: 15,
+//   });
+// });
 
 // Clear cache endpoint (for development)
-app.get("/cache/clear", (req, res) => {
-  cache.flushAll();
-  res.json({ message: "Cache cleared successfully" });
-});
+// Commented out for obivious reasons
+
+// app.get("/cache/clear", (req, res) => {
+//   cache.flushAll();
+//   res.json({ message: "Cache cleared successfully" });
+// });
 
 // Get Near Earth Objects for today
 app.get("/neo/today", async (req, res) => {
