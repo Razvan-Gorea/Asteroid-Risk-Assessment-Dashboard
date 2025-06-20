@@ -243,12 +243,23 @@ class NeoRiskService {
   }
 }
 
+function getBaseURL() {
+  const result = (
+    import.meta.env?.VITE_API_BASE_URL ||
+    process.env?.VITE_API_BASE_URL ||
+    'http://localhost:3000'
+  );  
+   
+  console.log('=== getBaseURL Debug ===');
+  console.log('import.meta.env?.VITE_API_BASE_URL:', import.meta.env?.VITE_API_BASE_URL);
+  console.log('process.env?.VITE_API_BASE_URL:', process.env?.VITE_API_BASE_URL);
+  console.log('Final result:', result);
+  console.log('========================');
 
+  return result;
+}
 
-// Main API instance and service exports
-const apiClient = new ApiClient(
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'
-);
+const apiClient = new ApiClient(getBaseURL());
 
 export const neoService = new NeoService(apiClient);
 export const neoSummaryService = new NeoSummaryService(apiClient);
