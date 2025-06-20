@@ -1,5 +1,5 @@
 // Test against production API
-process.env.VITE_API_BASE_URL = 'https://asteroid-dashboard-backend.onrender.com/';
+process.env.VITE_API_BASE_URL = 'https://asteroid-dashboard-backend.onrender.com';
 
 const { neoService } = await import('./client.js');
 
