@@ -73,15 +73,7 @@ const NavigationBar = () => {
                 to="/"
                 className="block py-2 px-3 text-white bg-blue-500 rounded md:bg-transparent md:text-blue-500 md:p-0 font-medium"
               >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/summary"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-blue-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-500 md:p-0"
-              >
-                Summary
+                Risk Assessment
               </Link>
             </li>
             <li>
@@ -94,10 +86,18 @@ const NavigationBar = () => {
             </li>
             <li>
               <Link
-                to="/search"
+                to="/core-data"
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-blue-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-500 md:p-0"
               >
-                Search
+                Core Data
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/individual-neo"
+                className="block py-2 px-3 text-gray-900 rounded hover:bg-blue-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-500 md:p-0"
+              >
+                Individual Neo
               </Link>
             </li>
           </ul>
