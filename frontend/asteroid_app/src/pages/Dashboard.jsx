@@ -1,3 +1,4 @@
+// Component imports
 import RiskAssessment from "../components/RiskAssessment";
 import HighestRiskNeos from "../components/HighestRiskNeos";
 
