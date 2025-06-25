@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { neoRiskService } from "../api/client";
+import { neoRiskService } from "../../api/client";
 
 const HighestRiskNeos = ({ selectedDate = null, limit = 10 }) => {
   // Get today's date once

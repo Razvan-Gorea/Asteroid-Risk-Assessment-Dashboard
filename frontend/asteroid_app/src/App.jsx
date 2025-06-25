@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Visualizations from "./pages/Visualizations";
 import IndividualNeo from "./pages/IndividualNeo";
-import NavigationBar from "./components/NavigationBar";
+import NavigationBar from "./components/All/NavigationBar";
 
 function App() {
   return (

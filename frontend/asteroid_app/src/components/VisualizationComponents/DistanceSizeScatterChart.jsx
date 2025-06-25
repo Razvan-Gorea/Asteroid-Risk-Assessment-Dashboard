@@ -10,7 +10,7 @@ import {
   Title,
 } from "chart.js";
 
-import { neoChartsService } from "../api/client";
+import { neoChartsService } from "../../api/client";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, Title);
 

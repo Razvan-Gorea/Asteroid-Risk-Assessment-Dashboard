@@ -1,6 +1,6 @@
 // Component imports
-import RiskAssessment from "../components/RiskAssessment";
-import HighestRiskNeos from "../components/HighestRiskNeos";
+import RiskAssessment from "../components/RiskComponents/RiskAssessment";
+import HighestRiskNeos from "../components/RiskComponents/HighestRiskNeos";
 
 function Dashboard() {
   return (

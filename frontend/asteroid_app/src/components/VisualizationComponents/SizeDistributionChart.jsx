@@ -3,7 +3,7 @@ import { Pie } from "react-chartjs-2";
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
 
-import { neoChartsService } from "../api/client";
+import { neoChartsService } from "../../api/client";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 

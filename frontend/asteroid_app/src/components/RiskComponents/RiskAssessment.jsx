@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { neoRiskService } from "../api/client";
+import { neoRiskService } from "../../api/client";
 
 const RiskAssessment = ({ selectedDate = null }) => {
   // Get today's date once

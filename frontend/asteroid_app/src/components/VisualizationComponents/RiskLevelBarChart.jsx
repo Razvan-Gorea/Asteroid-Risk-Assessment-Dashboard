@@ -11,7 +11,7 @@ import {
   Legend,
 } from "chart.js";
 
-import { neoChartsService } from "../api/client";
+import { neoChartsService } from "../../api/client";
 
 ChartJS.register(
   CategoryScale,

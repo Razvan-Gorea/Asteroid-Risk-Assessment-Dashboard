@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { neoChartsService } from "../api/client";
 
 // Component imports
-import SizeDistributionChart from "../components/SizeDistributionChart";
-import DistanceSizeScatterChart from "../components/DistanceSizeScatterChart";
-import TimelineChart from "../components/TimelineChart";
-import RiskLevelBarChart from "../components/RiskLevelBarChart";
+import SizeDistributionChart from "../components/VisualizationComponents/SizeDistributionChart";
+import DistanceSizeScatterChart from "../components/VisualizationComponents/DistanceSizeScatterChart";
+import TimelineChart from "../components/VisualizationComponents/TimelineChart";
+import RiskLevelBarChart from "../components/VisualizationComponents/RiskLevelBarChart";
 
 const Visualizations = () => {
   const [selectedChart, setSelectedChart] = useState("all");
