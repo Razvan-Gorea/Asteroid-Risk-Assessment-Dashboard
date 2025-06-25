@@ -86,14 +86,6 @@ const NavigationBar = () => {
             </li>
             <li>
               <Link
-                to="/core-data"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-blue-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-500 md:p-0"
-              >
-                Core Data
-              </Link>
-            </li>
-            <li>
-              <Link
                 to="/individual-neo"
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-blue-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-500 md:p-0"
               >
