@@ -1,6 +1,8 @@
+import Neo from "../components/IndividualNeo/Neo";
+
 function IndividualNeo(){
     return(
-        <h1>Page Loaded!</h1>
+        <Neo />
     );   
 }
 

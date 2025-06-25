@@ -11,6 +11,7 @@ const Visualizations = () => {
   const [selectedChart, setSelectedChart] = useState("all");
   const [selectedDate, setSelectedDate] = useState(null);
   const [summaryStats, setSummaryStats] = useState(null);
+  const [showKeyInsights, setShowKeyInsights] = useState(true);
 
   // Get today's date for default
   const today = new Date().toISOString().split("T")[0];
@@ -62,7 +63,7 @@ const Visualizations = () => {
         <div className="mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
             <h1 className="text-3xl font-bold text-gray-900 mb-4 lg:mb-0">
-              NEO Data Visualizations
+              (NEO) Near Earth Object Data Visualizations
             </h1>
 
             {/* Date Controls */}
@@ -139,30 +140,70 @@ const Visualizations = () => {
           )}
         </div>
 
-        {/* Summary Statistics */}
+        {/* Toggleable Summary Statistics */}
         {summaryStats && (
-          <div className="mt-8 bg-white p-6 rounded-lg shadow border border-blue-200">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
-              Key Insights
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <p className="text-2xl font-bold text-blue-600">
-                  {summaryStats.totalNeos}
-                </p>
-                <p className="text-gray-600">Total NEOs Today</p>
+          <div className="mt-8 bg-white rounded-lg shadow border border-blue-200 overflow-hidden">
+            {/* Toggle Header */}
+            <div
+              className="px-6 py-4 border-b border-blue-200 cursor-pointer hover:bg-blue-50 transition-colors"
+              onClick={() => setShowKeyInsights(!showKeyInsights)}
+            >
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold text-gray-900">
+                  Key Insights
+                </h2>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-500">
+                    {showKeyInsights ? "Hide" : "Show"}
+                  </span>
+                  <svg
+                    className={`w-5 h-5 text-gray-400 transform transition-transform duration-200 ${
+                      showKeyInsights ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </div>
               </div>
-              <div className="text-center p-4 bg-red-50 rounded-lg">
-                <p className="text-2xl font-bold text-red-600">
-                  {summaryStats.hazardousNeos}
-                </p>
-                <p className="text-gray-600">Potentially Hazardous</p>
-              </div>
-              <div className="text-center p-4 bg-green-50 rounded-lg">
-                <p className="text-2xl font-bold text-green-600">
-                  {summaryStats.timelineDays}
-                </p>
-                <p className="text-gray-600">Days of Data</p>
+            </div>
+
+            {/* Collapsible Content */}
+            <div
+              className={`transition-all duration-300 ease-in-out ${
+                showKeyInsights
+                  ? "max-h-96 opacity-100"
+                  : "max-h-0 opacity-0 overflow-hidden"
+              }`}
+            >
+              <div className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <p className="text-2xl font-bold text-blue-600">
+                      {summaryStats.totalNeos}
+                    </p>
+                    <p className="text-gray-600">Total NEOs Today</p>
+                  </div>
+                  <div className="text-center p-4 bg-red-50 rounded-lg">
+                    <p className="text-2xl font-bold text-red-600">
+                      {summaryStats.hazardousNeos}
+                    </p>
+                    <p className="text-gray-600">Potentially Hazardous</p>
+                  </div>
+                  <div className="text-center p-4 bg-green-50 rounded-lg">
+                    <p className="text-2xl font-bold text-green-600">
+                      {summaryStats.timelineDays}
+                    </p>
+                    <p className="text-gray-600">Days of Data</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
