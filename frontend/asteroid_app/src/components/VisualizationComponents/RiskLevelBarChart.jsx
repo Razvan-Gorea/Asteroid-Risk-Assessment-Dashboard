@@ -167,9 +167,6 @@ const RiskLevelBarChart = ({ selectedDate = null }) => {
       </div>
       <div className="mt-4 text-sm text-gray-600">
         <p>
-          <strong>Note:</strong> Risk levels derived from size categories
-        </p>
-        <p>
           <strong>Total NEOs:</strong> {data?.total_neos}
         </p>
         <p>

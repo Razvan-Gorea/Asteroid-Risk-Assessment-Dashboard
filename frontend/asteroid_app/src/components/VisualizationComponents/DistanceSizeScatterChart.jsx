@@ -151,12 +151,6 @@ const DistanceSizeScatterChart = ({ selectedDate = null }) => {
           size
         </p>
         <p>
-          <strong>Red dots:</strong> Potentially hazardous asteroids
-        </p>
-        <p>
-          <strong>Green dots:</strong> Non-hazardous asteroids
-        </p>
-        <p>
           <strong>Date:</strong> {new Date(data?.date).toLocaleDateString()}
         </p>
       </div>
