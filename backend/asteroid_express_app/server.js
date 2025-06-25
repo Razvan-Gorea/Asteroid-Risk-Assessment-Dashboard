@@ -55,7 +55,7 @@ app.get("/", (req, res) => {
 });
 
 // Cache statistics endpoint (for development)
-// Commented out in production for obivious reasons
+// Commented out
 
 // app.get("/cache/stats", (req, res) => {
 //   const stats = cache.getStats();
@@ -75,7 +75,7 @@ app.get("/", (req, res) => {
 // });
 
 // Clear cache endpoint (for development)
-// Commented out for obivious reasons
+// Commented out
 
 // app.get("/cache/clear", (req, res) => {
 //   cache.flushAll();
@@ -319,8 +319,7 @@ app.get("/neo/summary", async (req, res) => {
         largest_diameter_km: Math.max(
           ...allNeos.map(
             (neo) =>
-              neo.estimated_diameter?.kilometers?.estimated_diameter_max ||
-              0
+              neo.estimated_diameter?.kilometers?.estimated_diameter_max || 0
           )
         ),
         smallest_diameter_km: Math.min(
@@ -333,8 +332,7 @@ app.get("/neo/summary", async (req, res) => {
         closest_approach_km: Math.min(
           ...allNeos.map((neo) =>
             parseFloat(
-              neo.close_approach_data[0]?.miss_distance?.kilometers ||
-                Infinity
+              neo.close_approach_data[0]?.miss_distance?.kilometers || Infinity
             )
           )
         ),
@@ -350,8 +348,7 @@ app.get("/neo/summary", async (req, res) => {
           allNeos.reduce(
             (sum, neo) =>
               sum +
-              (neo.estimated_diameter?.kilometers?.estimated_diameter_max ||
-                0),
+              (neo.estimated_diameter?.kilometers?.estimated_diameter_max || 0),
             0
           ) / allNeos.length,
       };
@@ -391,8 +388,7 @@ app.get("/neo/summary/:date", async (req, res) => {
         largest_diameter_km: Math.max(
           ...allNeos.map(
             (neo) =>
-              neo.estimated_diameter?.kilometers?.estimated_diameter_max ||
-              0
+              neo.estimated_diameter?.kilometers?.estimated_diameter_max || 0
           )
         ),
         smallest_diameter_km: Math.min(
@@ -405,8 +401,7 @@ app.get("/neo/summary/:date", async (req, res) => {
         closest_approach_km: Math.min(
           ...allNeos.map((neo) =>
             parseFloat(
-              neo.close_approach_data[0]?.miss_distance?.kilometers ||
-                Infinity
+              neo.close_approach_data[0]?.miss_distance?.kilometers || Infinity
             )
           )
         ),
@@ -422,8 +417,7 @@ app.get("/neo/summary/:date", async (req, res) => {
           allNeos.reduce(
             (sum, neo) =>
               sum +
-              (neo.estimated_diameter?.kilometers?.estimated_diameter_max ||
-                0),
+              (neo.estimated_diameter?.kilometers?.estimated_diameter_max || 0),
             0
           ) / allNeos.length,
       };
@@ -583,8 +577,8 @@ app.get("/neo/charts/distance-size", async (req, res) => {
         y: neo.estimated_diameter?.kilometers?.estimated_diameter_max || 0,
         is_hazardous: neo.is_potentially_hazardous_asteroid,
         velocity: parseFloat(
-          neo.close_approach_data[0]?.relative_velocity
-            ?.kilometers_per_hour || 0
+          neo.close_approach_data[0]?.relative_velocity?.kilometers_per_hour ||
+            0
         ),
       }));
 
@@ -601,9 +595,7 @@ app.get("/neo/charts/distance-size", async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error("Error generating distance vs size data:", error);
-    res
-      .status(500)
-      .json({ error: "Failed to generate distance vs size data" });
+    res.status(500).json({ error: "Failed to generate distance vs size data" });
   }
 });
 
@@ -634,8 +626,8 @@ app.get("/neo/charts/distance-size/:date", async (req, res) => {
         y: neo.estimated_diameter?.kilometers?.estimated_diameter_max || 0,
         is_hazardous: neo.is_potentially_hazardous_asteroid,
         velocity: parseFloat(
-          neo.close_approach_data[0]?.relative_velocity
-            ?.kilometers_per_hour || 0
+          neo.close_approach_data[0]?.relative_velocity?.kilometers_per_hour ||
+            0
         ),
       }));
 
@@ -652,9 +644,7 @@ app.get("/neo/charts/distance-size/:date", async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error("Error generating distance vs size data:", error);
-    res
-      .status(500)
-      .json({ error: "Failed to generate distance vs size data" });
+    res.status(500).json({ error: "Failed to generate distance vs size data" });
   }
 });
 
@@ -742,9 +732,7 @@ function calculateRiskScore(neo) {
     neo.estimated_diameter?.kilometers?.estimated_diameter_max || 0;
   if (diameterKm > 10) {
     riskScore += 40;
-    riskFactors.push(
-      "Extremely large size (>10km) - Extinction level threat"
-    );
+    riskFactors.push("Extremely large size (>10km) - Extinction level threat");
   } else if (diameterKm > 1) {
     riskScore += 30;
     riskFactors.push("Very large size (1-10km) - Regional devastation");
@@ -819,14 +807,10 @@ function calculateRiskScore(neo) {
   const approachCount = neo.close_approach_data?.length || 1;
   if (approachCount > 3) {
     riskScore += 5;
-    riskFactors.push(
-      `Frequent Earth approaches (${approachCount} recorded)`
-    );
+    riskFactors.push(`Frequent Earth approaches (${approachCount} recorded)`);
   } else if (approachCount > 1) {
     riskScore += 2;
-    riskFactors.push(
-      `Multiple Earth approaches (${approachCount} recorded)`
-    );
+    riskFactors.push(`Multiple Earth approaches (${approachCount} recorded)`);
   }
 
   // Calculate risk level
@@ -902,9 +886,8 @@ app.get("/neo/risk-assessment", async (req, res) => {
         critical_risk: riskAssessments.filter(
           (neo) => neo.risk_level === "CRITICAL"
         ).length,
-        high_risk: riskAssessments.filter(
-          (neo) => neo.risk_level === "HIGH"
-        ).length,
+        high_risk: riskAssessments.filter((neo) => neo.risk_level === "HIGH")
+          .length,
         moderate_risk: riskAssessments.filter(
           (neo) => neo.risk_level === "MODERATE"
         ).length,
@@ -986,9 +969,8 @@ app.get("/neo/risk-assessment/:date", async (req, res) => {
         critical_risk: riskAssessments.filter(
           (neo) => neo.risk_level === "CRITICAL"
         ).length,
-        high_risk: riskAssessments.filter(
-          (neo) => neo.risk_level === "HIGH"
-        ).length,
+        high_risk: riskAssessments.filter((neo) => neo.risk_level === "HIGH")
+          .length,
         moderate_risk: riskAssessments.filter(
           (neo) => neo.risk_level === "MODERATE"
         ).length,
@@ -1078,9 +1060,7 @@ app.get("/neo/highest-risk", async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error("Error fetching highest risk NEOs:", error);
-    res
-      .status(500)
-      .json({ error: "Failed to fetch highest risk NEO data" });
+    res.status(500).json({ error: "Failed to fetch highest risk NEO data" });
   }
 });
 
@@ -1113,12 +1093,11 @@ app.get("/neo/simple", async (req, res) => {
           neo.close_approach_data[0]?.miss_distance?.kilometers || 0
         ).toLocaleString(),
         velocity_kmh: parseFloat(
-          neo.close_approach_data[0]?.relative_velocity
-            ?.kilometers_per_hour || 0
+          neo.close_approach_data[0]?.relative_velocity?.kilometers_per_hour ||
+            0
         ).toLocaleString(),
         is_hazardous: neo.is_potentially_hazardous_asteroid,
-        approach_date:
-          neo.close_approach_data[0]?.close_approach_date || date,
+        approach_date: neo.close_approach_data[0]?.close_approach_date || date,
         nasa_url: neo.nasa_jpl_url,
       }));
 
@@ -1131,9 +1110,7 @@ app.get("/neo/simple", async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error("Error generating simplified NEO data:", error);
-    res
-      .status(500)
-      .json({ error: "Failed to generate simplified NEO data" });
+    res.status(500).json({ error: "Failed to generate simplified NEO data" });
   }
 });
 
@@ -1166,12 +1143,11 @@ app.get("/neo/simple/:date", async (req, res) => {
           neo.close_approach_data[0]?.miss_distance?.kilometers || 0
         ).toLocaleString(),
         velocity_kmh: parseFloat(
-          neo.close_approach_data[0]?.relative_velocity
-            ?.kilometers_per_hour || 0
+          neo.close_approach_data[0]?.relative_velocity?.kilometers_per_hour ||
+            0
         ).toLocaleString(),
         is_hazardous: neo.is_potentially_hazardous_asteroid,
-        approach_date:
-          neo.close_approach_data[0]?.close_approach_date || date,
+        approach_date: neo.close_approach_data[0]?.close_approach_date || date,
         nasa_url: neo.nasa_jpl_url,
       }));
 
@@ -1184,9 +1160,7 @@ app.get("/neo/simple/:date", async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error("Error generating simplified NEO data:", error);
-    res
-      .status(500)
-      .json({ error: "Failed to generate simplified NEO data" });
+    res.status(500).json({ error: "Failed to generate simplified NEO data" });
   }
 });
 
@@ -1223,7 +1197,4 @@ app.get("/neo/:id", async (req, res) => {
 // Start server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
-  console.log(`Cache enabled with 15-minute TTL`);
-  console.log(`GET /cache/stats - View cache statistics`);
-  console.log(`DELETE /cache/clear - Clear all cache (dev only)`);
 });

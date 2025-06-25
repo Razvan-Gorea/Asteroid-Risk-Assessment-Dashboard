@@ -3,7 +3,7 @@ class ApiClient {
   constructor(baseURL) {
     this.baseURL = baseURL;
     this.defaultHeaders = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     };
   }
 
@@ -16,15 +16,17 @@ class ApiClient {
 
     try {
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        throw new Error(
+          errorData.error || `HTTP error! status: ${response.status}`
+        );
       }
-      
+
       return await response.json();
     } catch (error) {
-      console.error('API request failed:', error);
+      console.error("API request failed:", error);
       throw error;
     }
   }
@@ -32,10 +34,8 @@ class ApiClient {
   get(endpoint, params = {}, headers = {}) {
     const queryString = new URLSearchParams(params).toString();
     const url = queryString ? `${endpoint}?${queryString}` : endpoint;
-    return this.request(url, { method: 'GET', headers });
+    return this.request(url, { method: "GET", headers });
   }
-
-
 }
 
 // Service classes for different API endpoints
@@ -51,7 +51,7 @@ class NeoService {
    * @returns {Promise} NEO data for today
    */
   getNeoToday() {
-    return this.api.get('/neo/today');
+    return this.api.get("/neo/today");
   }
 
   /**
@@ -61,9 +61,9 @@ class NeoService {
    * @returns {Promise} NEO feed data
    */
   getNeoFeed(startDate, endDate) {
-    return this.api.get('/neo/feed', {
+    return this.api.get("/neo/feed", {
       start_date: startDate,
-      end_date: endDate
+      end_date: endDate,
     });
   }
 
@@ -77,7 +77,7 @@ class NeoService {
     const params = {};
     if (startDate) params.start_date = startDate;
     if (endDate) params.end_date = endDate;
-    return this.api.get('/neo/hazardous', params);
+    return this.api.get("/neo/hazardous", params);
   }
 
   /**
@@ -85,7 +85,7 @@ class NeoService {
    * @returns {Promise} NEO statistics
    */
   getNeoStats() {
-    return this.api.get('/neo/stats');
+    return this.api.get("/neo/stats");
   }
 
   /**
@@ -93,7 +93,7 @@ class NeoService {
    * @returns {Promise} Closest NEO data
    */
   getClosestNeos() {
-    return this.api.get('/neo/closest');
+    return this.api.get("/neo/closest");
   }
 
   /**
@@ -101,7 +101,7 @@ class NeoService {
    * @returns {Promise} Largest NEO data
    */
   getLargestNeos() {
-    return this.api.get('/neo/largest');
+    return this.api.get("/neo/largest");
   }
 
   /**
@@ -125,7 +125,7 @@ class NeoSummaryService {
    * @returns {Promise} NEO summary for today
    */
   getNeoSummary() {
-    return this.api.get('/neo/summary');
+    return this.api.get("/neo/summary");
   }
 
   /**
@@ -142,7 +142,7 @@ class NeoSummaryService {
    * @returns {Promise} Simplified NEO data
    */
   getSimpleNeos() {
-    return this.api.get('/neo/simple');
+    return this.api.get("/neo/simple");
   }
 
   /**
@@ -166,7 +166,7 @@ class NeoChartsService {
    * @returns {Promise} Size distribution chart data
    */
   getSizeDistribution() {
-    return this.api.get('/neo/charts/size-distribution');
+    return this.api.get("/neo/charts/size-distribution");
   }
 
   /**
@@ -183,7 +183,7 @@ class NeoChartsService {
    * @returns {Promise} Distance vs size scatter plot data
    */
   getDistanceSize() {
-    return this.api.get('/neo/charts/distance-size');
+    return this.api.get("/neo/charts/distance-size");
   }
 
   /**
@@ -201,7 +201,7 @@ class NeoChartsService {
    * @returns {Promise} Timeline chart data
    */
   getTimeline(days = 7) {
-    return this.api.get('/neo/charts/timeline', { days });
+    return this.api.get("/neo/charts/timeline", { days });
   }
 }
 
@@ -216,7 +216,7 @@ class NeoRiskService {
    * @returns {Promise} Risk assessment data
    */
   getRiskAssessment() {
-    return this.api.get('/neo/risk-assessment');
+    return this.api.get("/neo/risk-assessment");
   }
 
   /**
@@ -239,25 +239,24 @@ class NeoRiskService {
     const params = { limit };
     if (startDate) params.start_date = startDate;
     if (endDate) params.end_date = endDate;
-    return this.api.get('/neo/highest-risk', params);
+    return this.api.get("/neo/highest-risk", params);
   }
 }
 
 function getBaseURL() {
-  const result = (
+  const result =
     import.meta.env?.VITE_API_BASE_URL ||
     process.env?.VITE_API_BASE_URL ||
-    'http://localhost:3000'
-    // Set Fallback value to Backend Render URL for production
-  );  
-  
+    "http://localhost:3000";
+    // Set Fallback value to Backend URL in production
+
   //Useful to see if secrets are working
 
   // console.log('=== getBaseURL Debug ===');
   // console.log('import.meta.env?.VITE_API_BASE_URL:', import.meta.env?.VITE_API_BASE_URL);
-  // console.log('process.env?.VITE_API_BASE_URL:', process.env?.VITE_API_BASE_URL);
   // console.log('Final result:', result);
   // console.log('========================');
+  // console.log('process.env?.VITE_API_BASE_URL:', process.env?.VITE_API_BASE_URL);
 
   return result;
 }
@@ -277,27 +276,30 @@ export const neoAPI = {
   // Basic NEO data
   today: () => neoService.getNeoToday(),
   feed: (startDate, endDate) => neoService.getNeoFeed(startDate, endDate),
-  hazardous: (startDate, endDate) => neoService.getHazardousNeos(startDate, endDate),
+  hazardous: (startDate, endDate) =>
+    neoService.getHazardousNeos(startDate, endDate),
   stats: () => neoService.getNeoStats(),
   closest: () => neoService.getClosestNeos(),
   largest: () => neoService.getLargestNeos(),
   byId: (id) => neoService.getNeoById(id),
-  
+
   // Summary data
   summary: () => neoSummaryService.getNeoSummary(),
   summaryByDate: (date) => neoSummaryService.getNeoSummaryByDate(date),
   simple: () => neoSummaryService.getSimpleNeos(),
   simpleByDate: (date) => neoSummaryService.getSimpleNeosByDate(date),
-  
+
   // Chart data
   sizeDistribution: () => neoChartsService.getSizeDistribution(),
-  sizeDistributionByDate: (date) => neoChartsService.getSizeDistributionByDate(date),
+  sizeDistributionByDate: (date) =>
+    neoChartsService.getSizeDistributionByDate(date),
   distanceSize: () => neoChartsService.getDistanceSize(),
   distanceSizeByDate: (date) => neoChartsService.getDistanceSizeByDate(date),
   timeline: (days) => neoChartsService.getTimeline(days),
-  
+
   // Risk assessment
   riskAssessment: () => neoRiskService.getRiskAssessment(),
   riskAssessmentByDate: (date) => neoRiskService.getRiskAssessmentByDate(date),
-  highestRisk: (startDate, endDate, limit) => neoRiskService.getHighestRiskNeos(startDate, endDate, limit)
+  highestRisk: (startDate, endDate, limit) =>
+    neoRiskService.getHighestRiskNeos(startDate, endDate, limit),
 };

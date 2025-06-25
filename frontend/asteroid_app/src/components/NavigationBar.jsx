@@ -37,7 +37,7 @@ const NavigationBar = () => {
             Asteroid Risk Assessment Dashboard
           </span>
         </Link>
-        
+
         <button
           onClick={toggleMenu}
           type="button"
@@ -62,9 +62,11 @@ const NavigationBar = () => {
             />
           </svg>
         </button>
-        
-        <div 
-          className={`${isMenuOpen ? 'block' : 'hidden'} w-full md:block md:w-auto`} 
+
+        <div
+          className={`${
+            isMenuOpen ? "block" : "hidden"
+          } w-full md:block md:w-auto`}
           id="navbar-default"
         >
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-blue-200 rounded-lg bg-blue-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white">
