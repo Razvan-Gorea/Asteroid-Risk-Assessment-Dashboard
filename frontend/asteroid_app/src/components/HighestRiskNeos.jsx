@@ -244,7 +244,7 @@ const HighestRiskNeos = ({ selectedDate = null, limit = 10 }) => {
                 {/* Compact metrics */}
                 <div className="grid grid-cols-2 gap-2 mb-2">
                   <div className="bg-white p-2 rounded border border-blue-200">
-                    <h4 className="text-blue-500 text-xs font-medium">Score</h4>
+                    <h4 className="text-blue-500 text-xs font-medium">Risk Score</h4>
                     <p className="text-gray-900 text-sm font-bold">
                       {neo.risk_score}/100
                     </p>
