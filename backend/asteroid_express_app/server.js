@@ -6,8 +6,8 @@ const NodeCache = require("node-cache");
 
 const app = express();
 
-// Cache with 15-minute TTL (900 seconds)
-const cache = new NodeCache({ stdTTL: 900 });
+// Cache with 24-hour TTL (86400 seconds)
+const cache = new NodeCache({ stdTTL: 86400 });
 
 const port = process.env.PORT || 3000;
 const api_key = process.env.NASA_API_KEY;

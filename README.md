@@ -117,3 +117,43 @@ curl 'https://asteroid-dashboard-backend.onrender.com/neo/charts/size-distributi
 curl 'https://asteroid-dashboard-backend.onrender.com/neo/charts/timeline?days=30'
 ```
 
+---
+
+## Technical Breakdown
+
+This project has two aspects. A frontend and backend. The frontend is react with vite. While the backend is a simple node.js server with express. The backend is represented through a singular file called `server.js`. Inside that file are routes that implement endpoints. Each route calls a particular endpoint on NASA's NeoWs (Near Earth Object Web Service) public API. Each route calls an endpoint to retrieve some NASA data. That data is then returned as JSON. To increase the performance of the backend server, simple cache has been implemented. The cache has a time to live of 24 hours. This is very optimal as the NASA data rarely ever changes. This is configurable a value on `server.js`.
+
+As for the frontend, an API interface `client.js` was created. This is more efficient as we can abstract the fetch logic behind a class or specific instances tied to particular services. That way we don't need to write the fetch logic everytime we create or modify react components. You can interact with the API interface in three different ways:
+
+1. Through the `neoAPI` object:
+
+```
+import { neoAPI } from './api/client';
+
+// Simple, clean syntax
+const data = await neoAPI.today();
+const feed = await neoAPI.feed('2024-01-01', '2024-01-07');
+const charts = await neoAPI.sizeDistribution();
+```
+
+2. Individual Service Instances:
+
+```
+import { neoService, neoChartsService, neoRiskService } from './api/client';
+
+// More explicit, organized by functionality
+const data = await neoService.getNeoToday();
+const charts = await neoChartsService.getSizeDistribution();
+const risk = await neoRiskService.getRiskAssessment();
+```
+
+3. Raw ApiClient:
+
+```
+import { ApiClient } from './api/client';
+
+const client = new ApiClient('https://my-api.com');
+const customData = await client.get('/custom/endpoint');
+```
+
+The frontend styling is handled with just tailwindcss for its ease of implementation of responsiveness across different screen sizes. The react structure was implemented through pages and components. Each page is responsible for rendering its component(s) that has been specified in the code.
