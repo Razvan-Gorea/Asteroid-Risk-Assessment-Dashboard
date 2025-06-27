@@ -156,7 +156,7 @@ const client = new ApiClient('https://my-api.com');
 const customData = await client.get('/custom/endpoint');
 ```
 
-The frontend styling is handled with just Tailwind CSS for its ease of implementation of responsiveness across different screen sizes. The react structure was implemented through pages and components. Each page is responsible for rendering its component(s) that has been specified in the code. Although dedicated testing with Jest and React Testing Library has yet to be implemented, there are some basic test scripts you can still run. In `src/api` you can find two basic test files, `test_api_local.js` and `test_api_prod.js`. Just use the following command `node test_api_local` to test your local backend. The other file tests to see if the deployed API, (in my case the API deployed on Render) sends back correct responses to API calls. You can change the URL in `test_api_prod.js` to see if your deployed API works.
+The frontend styling is handled with just Tailwind CSS for its ease of implementation of responsiveness across different screen sizes. The react structure was implemented through pages and components. Each page is responsible for rendering its component(s) that has been specified in the code. Although dedicated testing with Jest and React Testing Library has yet to be implemented, there are some basic test scripts you can still run. In `src/api` you can find two basic test files, `test_api_local.js` and `test_api_prod.js`. Just use the following command `node test_api_local.js` to test your local backend. The other file tests to see if the deployed API, (in my case the API deployed on Render) sends back correct responses to API calls. You can change the URL in `test_api_prod.js` to see if your deployed API works.
 
 ---
 
