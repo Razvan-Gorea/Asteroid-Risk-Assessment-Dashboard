@@ -121,7 +121,7 @@ curl 'https://asteroid-dashboard-backend.onrender.com/neo/charts/timeline?days=3
 
 ## Technical Breakdown
 
-This project has two aspects. A frontend and backend. The frontend is react with vite. While the backend is a simple node.js server with express. The backend is represented through a singular file called `server.js`. Inside that file are routes that implement endpoints. Each route calls a particular endpoint on NASA's NeoWs (Near Earth Object Web Service) public API. Each route calls an endpoint to retrieve some NASA data. That data is then returned as JSON. To increase the performance of the backend server, simple cache has been implemented. The cache has a time to live of 24 hours. This is very optimal as the NASA data rarely ever changes. This is configurable a value on `server.js`.
+This project has two aspects. A frontend and backend. The frontend is React.js with Vite. While the backend is a simple Node.js server with Express. The backend is represented through a singular file called `server.js`. Inside that file are routes that implement endpoints. Each route calls a particular endpoint on NASA's NeoWs (Near Earth Object Web Service) public API. Each route calls an endpoint to retrieve some NASA data. That data is then returned as JSON. To increase the performance of the backend server, simple cache has been implemented. The cache has a time to live of 24 hours. This is very optimal as the NASA data rarely ever changes. This is configurable a value on `server.js`.
 
 As for the frontend, an API interface `client.js` was created. This is more efficient as we can abstract the fetch logic behind a class or specific instances tied to particular services. That way we don't need to write the fetch logic everytime we create or modify react components. You can interact with the API interface in three different ways:
 
@@ -156,4 +156,20 @@ const client = new ApiClient('https://my-api.com');
 const customData = await client.get('/custom/endpoint');
 ```
 
-The frontend styling is handled with just tailwindcss for its ease of implementation of responsiveness across different screen sizes. The react structure was implemented through pages and components. Each page is responsible for rendering its component(s) that has been specified in the code.
+The frontend styling is handled with just Tailwind CSS for its ease of implementation of responsiveness across different screen sizes. The react structure was implemented through pages and components. Each page is responsible for rendering its component(s) that has been specified in the code. Although dedicated testing with Jest and React Testing Library has yet to be implemented, there are some basic test scripts you can still run. In `src/api` you can find two basic test files, `test_api_local.js` and `test_api_prod.js`. Just use the following command `node test_api_local` to test your local backend. The other file tests to see if the deployed API, (in my case the API deployed on Render) sends back correct responses to API calls. You can change the URL in `test_api_prod.js` to see if your deployed API works.
+
+---
+
+## User Interface
+
+The user interface is very straight forward. You navigate entirely through the navigation bar at the top of the page. There are three pages:
+
+1. The Risk Assessment Page
+2. The Visualizations Page
+3. The Individual NEO (Near Earth Object) Page
+
+The Risk Assessment page displays today's risk assessment along with today's highest risk near earth objects. This page updates everyday. You can use also filter by a specific date to see information on that date. 
+
+The Visualizations page offers some interesting data visualizations in the form of pie chart, bar chart, scatter plot and timeline. Here you can also filter by a specific date. You can also hide parts of the user interface through buttons.
+
+The Individual Near Earth Object page by far provides the most amount of information. On this page you can search for a specific Near Earth Object. You just type the ID of the Near Earth Object and hit enter or the submit button. 
