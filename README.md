@@ -19,7 +19,7 @@ Asteroid Dashboard Found [Here](https://asteroid-risk-assessment-dashboard.onren
 
 NEO - Near Earth Object
 
-This API provides comprehensive asteroid data, risk assessments, and visualization-ready datasets.
+This API provides comprehensive asteroid data, risk assessments, and visualization-ready data.
 
 ## Available Endpoints
 
