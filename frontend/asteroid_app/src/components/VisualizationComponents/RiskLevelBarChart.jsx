@@ -121,7 +121,7 @@ const RiskLevelBarChart = ({ selectedDate = null }) => {
       x: {
         title: {
           display: true,
-          text: "Risk Level (Based on Size)",
+          text: "Risk Level (Based on Estimated Max Diameter)",
         },
       },
       y: {

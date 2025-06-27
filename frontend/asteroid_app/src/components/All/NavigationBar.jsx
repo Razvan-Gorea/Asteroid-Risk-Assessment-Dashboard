@@ -140,7 +140,7 @@ const NavigationBar = () => {
                 )}
                 style={{ animationDelay: "300ms" }}
               >
-                Individual Neo
+                Individual NEO
                 {!isActiveRoute("/individual-neo") && (
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 ease-out group-hover:w-full md:block hidden"></span>
                 )}

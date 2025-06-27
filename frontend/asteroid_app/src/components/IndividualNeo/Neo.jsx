@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { neoService } from '../../api/client';
+import { useState, useEffect } from "react";
+import { neoService } from "../../api/client";
 
 const Neo = () => {
-  const [neoId, setNeoId] = useState('');
+  const [neoId, setNeoId] = useState("");
   const [selectedNeoId, setSelectedNeoId] = useState(null);
   const [neoData, setNeoData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -18,7 +18,7 @@ const Neo = () => {
     setSelectedNeoId(null);
     setNeoData(null);
     setError(null);
-    setNeoId('');
+    setNeoId("");
   };
 
   useEffect(() => {
@@ -29,16 +29,16 @@ const Neo = () => {
 
   const fetchNeoDetails = async () => {
     if (!selectedNeoId) return;
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       const data = await neoService.getNeoById(selectedNeoId);
       setNeoData(data);
     } catch (err) {
-      setError(err.message || 'Failed to fetch NEO details');
-      console.error('NEO fetch error:', err);
+      setError(err.message || "Failed to fetch NEO details");
+      console.error("NEO fetch error:", err);
     } finally {
       setLoading(false);
     }
@@ -49,9 +49,13 @@ const Neo = () => {
   };
 
   const formatDiameter = (diameterObj) => {
-    if (!diameterObj || !diameterObj.kilometers) return 'Unknown';
-    const min = parseFloat(diameterObj.kilometers.estimated_diameter_min || 0).toFixed(2);
-    const max = parseFloat(diameterObj.kilometers.estimated_diameter_max || 0).toFixed(2);
+    if (!diameterObj || !diameterObj.kilometers) return "Unknown";
+    const min = parseFloat(
+      diameterObj.kilometers.estimated_diameter_min || 0
+    ).toFixed(2);
+    const max = parseFloat(
+      diameterObj.kilometers.estimated_diameter_max || 0
+    ).toFixed(2);
     return `${min} - ${max} km`;
   };
 
@@ -66,14 +70,21 @@ const Neo = () => {
         <div className="bg-white rounded-lg shadow border border-blue-200 overflow-hidden">
           {/* Header */}
           <div className="px-6 py-4 border-b border-blue-200">
-            <h2 className="text-xl font-bold text-gray-900">NEO Details Viewer</h2>
-            <p className="text-sm text-blue-500 mt-1">Enter a Near Earth Object ID to view detailed information</p>
+            <h2 className="text-xl font-bold text-gray-900">
+              NEO Details Viewer
+            </h2>
+            <p className="text-sm text-blue-500 mt-1">
+              Enter a Near Earth Object ID to view detailed information
+            </p>
           </div>
-          
+
           {/* Form Content */}
           <div className="p-6">
             <div className="mb-6">
-              <label htmlFor="neoId" className="block text-blue-500 text-sm font-medium mb-2">
+              <label
+                htmlFor="neoId"
+                className="block text-blue-500 text-sm font-medium mb-2"
+              >
                 NEO ID
               </label>
               <div className="flex gap-3">
@@ -82,10 +93,10 @@ const Neo = () => {
                   type="text"
                   value={neoId}
                   onChange={(e) => setNeoId(e.target.value)}
-                  placeholder="Enter NEO ID (e.g., 2000433, 3542519)"
+                  placeholder="Enter NEO ID"
                   className="flex-1 px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
+                    if (e.key === "Enter") {
                       handleSubmit();
                     }
                   }}
@@ -101,9 +112,11 @@ const Neo = () => {
             </div>
 
             <div className="bg-white rounded-lg shadow border border-blue-200 p-4">
-              <h3 className="text-blue-500 font-medium mb-2">Try these example NEO IDs:</h3>
+              <h3 className="text-blue-500 font-medium mb-2">
+                Try these example NEO IDs:
+              </h3>
               <div className="flex flex-wrap gap-2">
-                {['2000433', '3542519', '2001620', '2162038'].map((id) => (
+                {["2000433", "3542519", "2001620", "2162038"].map((id) => (
                   <button
                     key={id}
                     onClick={() => {
@@ -194,18 +207,20 @@ const Neo = () => {
   }
 
   const neo = neoData;
-  
+
   // Find the next future close approach
   const now = new Date();
-  const futureApproaches = neo.close_approach_data?.filter(approach => {
-    const approachDate = new Date(approach.close_approach_date);
-    return approachDate > now;
-  }) || [];
-  
+  const futureApproaches =
+    neo.close_approach_data?.filter((approach) => {
+      const approachDate = new Date(approach.close_approach_date);
+      return approachDate > now;
+    }) || [];
+
   // If no future approaches, use the most recent past approach
-  const closeApproach = futureApproaches.length > 0 
-    ? futureApproaches[0] // First future approach (they should be sorted)
-    : neo.close_approach_data?.[0]; // Fallback to first approach
+  const closeApproach =
+    futureApproaches.length > 0
+      ? futureApproaches[0] // First future approach (they should be sorted)
+      : neo.close_approach_data?.[0]; // Fallback to first approach
 
   return (
     <div className="w-full max-w-6xl mx-auto p-4">
@@ -229,32 +244,51 @@ const Neo = () => {
           {/* Key Status Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-              <h3 className="text-blue-500 text-sm font-medium mb-2">Hazard Status</h3>
+              <h3 className="text-blue-500 text-sm font-medium mb-2">
+                Hazard Status
+              </h3>
               <div className="flex items-center justify-center">
-                <span className={`inline-block w-3 h-3 rounded-full mr-2 ${
-                  neo.is_potentially_hazardous_asteroid ? 'bg-red-500' : 'bg-green-500'
-                }`}></span>
-                <span className={`text-sm font-medium ${
-                  neo.is_potentially_hazardous_asteroid ? 'text-red-700' : 'text-green-700'
-                }`}>
-                  {neo.is_potentially_hazardous_asteroid ? 'Potentially Hazardous' : 'Not Hazardous'}
+                <span
+                  className={`inline-block w-3 h-3 rounded-full mr-2 ${
+                    neo.is_potentially_hazardous_asteroid
+                      ? "bg-red-500"
+                      : "bg-green-500"
+                  }`}
+                ></span>
+                <span
+                  className={`text-sm font-medium ${
+                    neo.is_potentially_hazardous_asteroid
+                      ? "text-red-700"
+                      : "text-green-700"
+                  }`}
+                >
+                  {neo.is_potentially_hazardous_asteroid
+                    ? "Potentially Hazardous"
+                    : "Not Hazardous"}
                 </span>
               </div>
             </div>
 
             <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-              <h3 className="text-blue-500 text-sm font-medium mb-2">Size Range</h3>
-              <p className="text-gray-900 text-lg font-bold">{formatDiameter(neo.estimated_diameter)}</p>
+              <h3 className="text-blue-500 text-sm font-medium mb-2">
+                Size Range
+              </h3>
+              <p className="text-gray-900 text-lg font-bold">
+                {formatDiameter(neo.estimated_diameter)}
+              </p>
               <p className="text-xs text-gray-600 mt-1">Estimated diameter</p>
             </div>
 
             <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-              <h3 className="text-blue-500 text-sm font-medium mb-2">Time to Orbit Sun</h3>
+              <h3 className="text-blue-500 text-sm font-medium mb-2">
+                Time to Orbit Sun
+              </h3>
               <p className="text-gray-900 text-lg font-bold">
-                {neo.orbital_data?.orbital_period ? 
-                  `${parseFloat(neo.orbital_data.orbital_period).toFixed(1)} days` : 
-                  'Unknown'
-                }
+                {neo.orbital_data?.orbital_period
+                  ? `${parseFloat(neo.orbital_data.orbital_period).toFixed(
+                      1
+                    )} days`
+                  : "Unknown"}
               </p>
               <p className="text-xs text-gray-600 mt-1">One complete orbit</p>
             </div>
@@ -264,32 +298,63 @@ const Neo = () => {
           {closeApproach && (
             <div className="bg-white rounded-lg shadow border border-blue-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                {futureApproaches.length > 0 ? 'Next Close Approach' : 'Most Recent Close Approach'}
+                {futureApproaches.length > 0
+                  ? "Next Close Approach"
+                  : "Most Recent Close Approach"}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                  <h4 className="text-blue-500 text-sm font-medium mb-2">Approach Date</h4>
-                  <p className="text-gray-900 font-bold">{closeApproach.close_approach_date_full || closeApproach.close_approach_date}</p>
+                  <h4 className="text-blue-500 text-sm font-medium mb-2">
+                    Approach Date
+                  </h4>
+                  <p className="text-gray-900 font-bold">
+                    {closeApproach.close_approach_date_full ||
+                      closeApproach.close_approach_date}
+                  </p>
                   {futureApproaches.length > 0 ? (
-                    <p className="text-xs text-green-600 mt-1">Future approach</p>
+                    <p className="text-xs text-green-600 mt-1">
+                      Future approach
+                    </p>
                   ) : (
                     <p className="text-xs text-gray-600 mt-1">Past approach</p>
                   )}
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                  <h4 className="text-blue-500 text-sm font-medium mb-2">Miss Distance</h4>
-                  <p className="text-gray-900 font-bold">{formatDistance(closeApproach.miss_distance?.kilometers)} km</p>
-                  <p className="text-xs text-gray-600 mt-1">{parseFloat(closeApproach.miss_distance?.lunar).toFixed(2)} lunar distances</p>
+                  <h4 className="text-blue-500 text-sm font-medium mb-2">
+                    Miss Distance
+                  </h4>
+                  <p className="text-gray-900 font-bold">
+                    {formatDistance(closeApproach.miss_distance?.kilometers)} km
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1">
+                    {parseFloat(closeApproach.miss_distance?.lunar).toFixed(2)}{" "}
+                    lunar distances
+                  </p>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                  <h4 className="text-blue-500 text-sm font-medium mb-2">Approach Speed</h4>
-                  <p className="text-gray-900 font-bold">{formatVelocity(closeApproach.relative_velocity?.kilometers_per_hour)} km/h</p>
-                  <p className="text-xs text-gray-600 mt-1">Relative to {closeApproach.orbiting_body}</p>
+                  <h4 className="text-blue-500 text-sm font-medium mb-2">
+                    Approach Speed
+                  </h4>
+                  <p className="text-gray-900 font-bold">
+                    {formatVelocity(
+                      closeApproach.relative_velocity?.kilometers_per_hour
+                    )}{" "}
+                    km/h
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1">
+                    Relative to {closeApproach.orbiting_body}
+                  </p>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                  <h4 className="text-blue-500 text-sm font-medium mb-2">Approaching</h4>
-                  <p className="text-gray-900 font-bold">{closeApproach.orbiting_body}</p>
-                  <p className="text-xs text-gray-600 mt-1">Planet being approached</p>
+                  <h4 className="text-blue-500 text-sm font-medium mb-2">
+                    Approaching
+                  </h4>
+                  <p className="text-gray-900 font-bold">
+                    {closeApproach.orbiting_body}
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1">
+                    Planet being approached
+                  </p>
                 </div>
               </div>
             </div>
@@ -298,37 +363,59 @@ const Neo = () => {
           {/* Physical Characteristics */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white rounded-lg shadow border border-blue-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Physical Properties</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Physical Properties
+              </h3>
               <div className="space-y-4">
                 <div className="bg-white p-4 rounded-lg shadow border border-blue-200">
-                  <h4 className="text-blue-500 text-sm font-medium mb-1">Absolute Magnitude</h4>
-                  <p className="text-gray-900 font-bold">{neo.absolute_magnitude_h}</p>
+                  <h4 className="text-blue-500 text-sm font-medium mb-1">
+                    Absolute Magnitude
+                  </h4>
+                  <p className="text-gray-900 font-bold">
+                    {neo.absolute_magnitude_h}
+                  </p>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow border border-blue-200">
-                  <h4 className="text-blue-500 text-sm font-medium mb-1">Diameter (km)</h4>
-                  <p className="text-gray-900 font-bold">{formatDiameter(neo.estimated_diameter)}</p>
+                  <h4 className="text-blue-500 text-sm font-medium mb-1">
+                    Diameter (km)
+                  </h4>
+                  <p className="text-gray-900 font-bold">
+                    {formatDiameter(neo.estimated_diameter)}
+                  </p>
                 </div>
                 {neo.estimated_diameter?.meters && (
                   <div className="bg-white p-4 rounded-lg shadow border border-blue-200">
-                    <h4 className="text-blue-500 text-sm font-medium mb-1">Diameter (m)</h4>
-                    <p className="text-gray-900 font-bold">{formatDiameter(neo.estimated_diameter.meters)} m</p>
+                    <h4 className="text-blue-500 text-sm font-medium mb-1">
+                      Diameter (m)
+                    </h4>
+                    <p className="text-gray-900 font-bold">
+                      {formatDiameter(neo.estimated_diameter.meters)} m
+                    </p>
                   </div>
                 )}
               </div>
             </div>
 
             <div className="bg-white rounded-lg shadow border border-blue-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Classification</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Classification
+              </h3>
               <div className="space-y-4">
                 <div className="bg-white p-4 rounded-lg shadow border border-blue-200">
-                  <h4 className="text-blue-500 text-sm font-medium mb-1">NEO Reference ID</h4>
-                  <p className="text-gray-900 font-bold">{neo.neo_reference_id}</p>
+                  <h4 className="text-blue-500 text-sm font-medium mb-1">
+                    NEO Reference ID
+                  </h4>
+                  <p className="text-gray-900 font-bold">
+                    {neo.neo_reference_id}
+                  </p>
                 </div>
                 <div className="bg-white p-4 rounded-lg shadow border border-blue-200">
-                  <h4 className="text-blue-500 text-sm font-medium mb-1">NASA JPL URL</h4>
-                  <a 
-                    href={neo.nasa_jpl_url} 
-                    target="_blank" 
+                  <h4 className="text-blue-500 text-sm font-medium mb-1">
+                    NASA JPL URL
+                  </h4>
+                  <a
+                    href={neo.nasa_jpl_url}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:text-blue-800 underline font-medium"
                   >
@@ -342,42 +429,76 @@ const Neo = () => {
           {/* Orbital Data */}
           {neo.orbital_data && (
             <div className="bg-white rounded-lg shadow border border-blue-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Orbital Characteristics</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Orbital Characteristics
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {neo.orbital_data.orbital_period && (
                   <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                    <h4 className="text-blue-500 text-sm font-medium mb-2">Orbital Period</h4>
-                    <p className="text-gray-900 font-bold">{parseFloat(neo.orbital_data.orbital_period).toFixed(1)} days</p>
+                    <h4 className="text-blue-500 text-sm font-medium mb-2">
+                      Orbital Period
+                    </h4>
+                    <p className="text-gray-900 font-bold">
+                      {parseFloat(neo.orbital_data.orbital_period).toFixed(1)}{" "}
+                      days
+                    </p>
                   </div>
                 )}
                 {neo.orbital_data.minimum_orbit_intersection && (
                   <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                    <h4 className="text-blue-500 text-sm font-medium mb-2">Min Orbit Intersection</h4>
-                    <p className="text-gray-900 font-bold">{parseFloat(neo.orbital_data.minimum_orbit_intersection).toFixed(6)} AU</p>
+                    <h4 className="text-blue-500 text-sm font-medium mb-2">
+                      Min Orbit Intersection
+                    </h4>
+                    <p className="text-gray-900 font-bold">
+                      {parseFloat(
+                        neo.orbital_data.minimum_orbit_intersection
+                      ).toFixed(6)}{" "}
+                      AU
+                    </p>
                   </div>
                 )}
                 {neo.orbital_data.eccentricity && (
                   <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                    <h4 className="text-blue-500 text-sm font-medium mb-2">Eccentricity</h4>
-                    <p className="text-gray-900 font-bold">{parseFloat(neo.orbital_data.eccentricity).toFixed(6)}</p>
+                    <h4 className="text-blue-500 text-sm font-medium mb-2">
+                      Eccentricity
+                    </h4>
+                    <p className="text-gray-900 font-bold">
+                      {parseFloat(neo.orbital_data.eccentricity).toFixed(6)}
+                    </p>
                   </div>
                 )}
                 {neo.orbital_data.semi_major_axis && (
                   <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                    <h4 className="text-blue-500 text-sm font-medium mb-2">Semi-major Axis</h4>
-                    <p className="text-gray-900 font-bold">{parseFloat(neo.orbital_data.semi_major_axis).toFixed(6)} AU</p>
+                    <h4 className="text-blue-500 text-sm font-medium mb-2">
+                      Semi-major Axis
+                    </h4>
+                    <p className="text-gray-900 font-bold">
+                      {parseFloat(neo.orbital_data.semi_major_axis).toFixed(6)}{" "}
+                      AU
+                    </p>
                   </div>
                 )}
                 {neo.orbital_data.inclination && (
                   <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                    <h4 className="text-blue-500 text-sm font-medium mb-2">Inclination</h4>
-                    <p className="text-gray-900 font-bold">{parseFloat(neo.orbital_data.inclination).toFixed(2)}°</p>
+                    <h4 className="text-blue-500 text-sm font-medium mb-2">
+                      Inclination
+                    </h4>
+                    <p className="text-gray-900 font-bold">
+                      {parseFloat(neo.orbital_data.inclination).toFixed(2)}°
+                    </p>
                   </div>
                 )}
                 {neo.orbital_data.ascending_node_longitude && (
                   <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                    <h4 className="text-blue-500 text-sm font-medium mb-2">Ascending Node</h4>
-                    <p className="text-gray-900 font-bold">{parseFloat(neo.orbital_data.ascending_node_longitude).toFixed(2)}°</p>
+                    <h4 className="text-blue-500 text-sm font-medium mb-2">
+                      Ascending Node
+                    </h4>
+                    <p className="text-gray-900 font-bold">
+                      {parseFloat(
+                        neo.orbital_data.ascending_node_longitude
+                      ).toFixed(2)}
+                      °
+                    </p>
                   </div>
                 )}
               </div>
@@ -387,27 +508,48 @@ const Neo = () => {
           {/* All Close Approaches */}
           {neo.close_approach_data && neo.close_approach_data.length > 1 && (
             <div className="bg-white rounded-lg shadow border border-blue-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">All Recorded Close Approaches</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                All Recorded Close Approaches
+              </h3>
               <p className="text-sm text-gray-600 mb-4">
-                Historical and predicted close encounters with planets as this asteroid orbits the Sun
+                Historical and predicted close encounters with planets as this
+                asteroid orbits the Sun
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-blue-200">
-                      <th className="text-left py-3 px-4 text-blue-500 font-medium">Approach Date</th>
-                      <th className="text-left py-3 px-4 text-blue-500 font-medium">Miss Distance (km)</th>
-                      <th className="text-left py-3 px-4 text-blue-500 font-medium">Approach Speed (km/h)</th>
-                      <th className="text-left py-3 px-4 text-blue-500 font-medium">Planet Approached</th>
+                      <th className="text-left py-3 px-4 text-blue-500 font-medium">
+                        Approach Date
+                      </th>
+                      <th className="text-left py-3 px-4 text-blue-500 font-medium">
+                        Miss Distance (km)
+                      </th>
+                      <th className="text-left py-3 px-4 text-blue-500 font-medium">
+                        Approach Speed (km/h)
+                      </th>
+                      <th className="text-left py-3 px-4 text-blue-500 font-medium">
+                        Planet Approached
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {neo.close_approach_data.map((approach, index) => (
                       <tr key={index} className="border-b border-blue-100">
-                        <td className="py-3 px-4 text-gray-900">{approach.close_approach_date}</td>
-                        <td className="py-3 px-4 text-gray-900">{formatDistance(approach.miss_distance?.kilometers)}</td>
-                        <td className="py-3 px-4 text-gray-900">{formatVelocity(approach.relative_velocity?.kilometers_per_hour)}</td>
-                        <td className="py-3 px-4 text-gray-900">{approach.orbiting_body}</td>
+                        <td className="py-3 px-4 text-gray-900">
+                          {approach.close_approach_date}
+                        </td>
+                        <td className="py-3 px-4 text-gray-900">
+                          {formatDistance(approach.miss_distance?.kilometers)}
+                        </td>
+                        <td className="py-3 px-4 text-gray-900">
+                          {formatVelocity(
+                            approach.relative_velocity?.kilometers_per_hour
+                          )}
+                        </td>
+                        <td className="py-3 px-4 text-gray-900">
+                          {approach.orbiting_body}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

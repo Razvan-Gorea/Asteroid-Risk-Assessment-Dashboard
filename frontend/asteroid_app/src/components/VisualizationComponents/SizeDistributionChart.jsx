@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { Pie } from "react-chartjs-2";
-
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
-
 import { neoChartsService } from "../../api/client";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
@@ -17,11 +15,9 @@ const SizeDistributionChart = ({ selectedDate = null }) => {
       try {
         setLoading(true);
         setError(null);
-
         const response = selectedDate
           ? await neoChartsService.getSizeDistributionByDate(selectedDate)
           : await neoChartsService.getSizeDistribution();
-
         setData(response);
       } catch (err) {
         setError(err.message);
@@ -29,7 +25,6 @@ const SizeDistributionChart = ({ selectedDate = null }) => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [selectedDate]);
 
@@ -65,14 +60,17 @@ const SizeDistributionChart = ({ selectedDate = null }) => {
       },
       title: {
         display: true,
-        text: "NEO Size Distribution",
+        text: "NEO Estimated Size Distribution (Max Diameter)",
         font: { size: 16, weight: "bold" },
       },
       tooltip: {
         callbacks: {
           label: (context) => {
             const item = data?.size_distribution[context.dataIndex];
-            return `${context.label}: ${context.parsed} NEOs (${item?.percentage}%)`;
+            return [
+              `${context.label}: ${context.parsed} NEOs (${item?.percentage}%)`,
+              `Based on estimated maximum diameter`,
+            ];
           },
         },
       },

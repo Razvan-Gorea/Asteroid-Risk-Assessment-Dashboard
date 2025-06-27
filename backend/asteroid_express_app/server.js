@@ -26,7 +26,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Helper function to get cached data or fetch from NASA
+// Get cached data or fetch from NASA
 async function getCachedOrFetch(cacheKey, fetchFunction) {
   // Check cache first
   const cachedData = cache.get(cacheKey);
@@ -47,40 +47,40 @@ async function getCachedOrFetch(cacheKey, fetchFunction) {
   return data;
 }
 
+// Cache statistics (for development)
+// Commented out
+
+// app.get("/cache/stats", (req, res) => {
+  //   const stats = cache.getStats();
+  //   const keys = cache.keys();
+  
+  //   res.json({
+    //     cache_stats: {
+      //       keys_count: keys.length,
+      //       hits: stats.hits,
+      //       misses: stats.misses,
+      //       hit_rate: stats.hits / (stats.hits + stats.misses) || 0,
+      //       keys: keys,
+      //     },
+      //     ttl_seconds: 900,
+      //     ttl_minutes: 15,
+      //   });
+      // });
+      
+      // Clear cache (for development)
+      // Commented out
+      
+      // app.get("/cache/clear", (req, res) => {
+        //   cache.flushAll();
+        //   res.json({ message: "Cache cleared successfully" });
+        // });
+        
 // Routes
 
 // Base route
 app.get("/", (req, res) => {
   res.send("Custom API with Caching");
 });
-
-// Cache statistics endpoint (for development)
-// Commented out
-
-// app.get("/cache/stats", (req, res) => {
-//   const stats = cache.getStats();
-//   const keys = cache.keys();
-
-//   res.json({
-//     cache_stats: {
-//       keys_count: keys.length,
-//       hits: stats.hits,
-//       misses: stats.misses,
-//       hit_rate: stats.hits / (stats.hits + stats.misses) || 0,
-//       keys: keys,
-//     },
-//     ttl_seconds: 900,
-//     ttl_minutes: 15,
-//   });
-// });
-
-// Clear cache endpoint (for development)
-// Commented out
-
-// app.get("/cache/clear", (req, res) => {
-//   cache.flushAll();
-//   res.json({ message: "Cache cleared successfully" });
-// });
 
 // Get Near Earth Objects for today
 app.get("/neo/today", async (req, res) => {
