@@ -25,3 +25,12 @@ dist-ssr
 
 # Secrets
 .env.local
+
+# claude stuff
+.agents/
+.claude/
+skills-lock.json
+.agents
+.claude
+agents
+claude
