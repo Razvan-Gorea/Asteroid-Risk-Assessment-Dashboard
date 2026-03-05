@@ -9,13 +9,29 @@ import NavigationBar from "./components/All/NavigationBar";
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-blue-50 p-3">
-        <NavigationBar />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/visualizations" element={<Visualizations />} />
-          <Route path="/individual-neo" element={<IndividualNeo />} />
-        </Routes>
+      <div className="min-h-screen p-3 md:p-4" style={{ background: "#030810", position: "relative" }}>
+        {/* Grid background */}
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundImage: `
+              linear-gradient(rgba(0, 212, 255, 0.025) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0, 212, 255, 0.025) 1px, transparent 1px)
+            `,
+            backgroundSize: "50px 50px",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <NavigationBar />
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/visualizations" element={<Visualizations />} />
+            <Route path="/individual-neo" element={<IndividualNeo />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );

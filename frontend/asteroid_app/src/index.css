@@ -1,1 +1,278 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Share+Tech+Mono&display=swap');
+
 @import "tailwindcss";
+
+@theme {
+  --color-void: #030810;
+  --color-deep: #050d1a;
+  --color-surface: #0a1628;
+  --color-card: #0d1e38;
+  --color-elevated: #112240;
+  --color-border: #1a3050;
+  --color-cyan: #00d4ff;
+  --color-amber: #ff8c00;
+  --color-critical: #ff1744;
+  --color-high-risk: #ff6d00;
+  --color-moderate: #ffd600;
+  --color-low-risk: #00b0ff;
+  --color-minimal: #00e676;
+  --color-dim: #4a6280;
+  --color-muted: #7090b0;
+  --color-text: #e0f0ff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  background-color: #030810;
+  color: #e0f0ff;
+  margin: 0;
+}
+
+/* Scanline overlay */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 212, 255, 0.008) 3px,
+    rgba(0, 212, 255, 0.008) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #050d1a;
+}
+::-webkit-scrollbar-thumb {
+  background: #1a3050;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 212, 255, 0.3);
+}
+
+/* Dark date input */
+input[type="date"] {
+  color-scheme: dark;
+}
+
+/* Font helpers */
+.font-display {
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.font-mono-data {
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+/* Card component */
+.neo-card {
+  background: #0d1e38;
+  border: 1px solid #1a3050;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.neo-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 212, 255, 0.4) 50%, transparent 100%);
+}
+
+/* Bracket corners */
+.bracket {
+  position: relative;
+}
+.bracket::before,
+.bracket::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: rgba(0, 212, 255, 0.5);
+  border-style: solid;
+  pointer-events: none;
+}
+.bracket::before {
+  top: 0;
+  left: 0;
+  border-width: 1px 0 0 1px;
+}
+.bracket::after {
+  bottom: 0;
+  right: 0;
+  border-width: 0 1px 1px 0;
+}
+
+/* Glow effects */
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.12), 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+.glow-amber {
+  box-shadow: 0 0 20px rgba(255, 140, 0, 0.2), 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+.glow-critical {
+  box-shadow: 0 0 20px rgba(255, 23, 68, 0.3), 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Pulse for critical */
+@keyframes pulse-threat {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(255, 23, 68, 0.5); }
+  50% { opacity: 0.7; box-shadow: 0 0 16px rgba(255, 23, 68, 0.8); }
+}
+.pulse-threat {
+  animation: pulse-threat 2s ease-in-out infinite;
+}
+
+/* Loading scanner */
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(400%); }
+}
+.scanner-line {
+  animation: scan 2s linear infinite;
+}
+
+/* Stat card */
+.stat-card {
+  background: #050d1a;
+  border: 1px solid #1a3050;
+  padding: 0.75rem 1rem;
+  position: relative;
+}
+
+/* Risk badge glow */
+.badge-critical { background: rgba(255, 23, 68, 0.15); color: #ff4565; border: 1px solid rgba(255, 23, 68, 0.4); }
+.badge-high { background: rgba(255, 109, 0, 0.15); color: #ff8c3a; border: 1px solid rgba(255, 109, 0, 0.4); }
+.badge-moderate { background: rgba(255, 214, 0, 0.1); color: #ffd600; border: 1px solid rgba(255, 214, 0, 0.3); }
+.badge-low { background: rgba(0, 176, 255, 0.1); color: #00b0ff; border: 1px solid rgba(0, 176, 255, 0.3); }
+.badge-minimal { background: rgba(0, 230, 118, 0.1); color: #00e676; border: 1px solid rgba(0, 230, 118, 0.3); }
+
+/* Button styles */
+.btn-primary {
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  color: #00d4ff;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 1px;
+}
+.btn-primary:hover {
+  background: rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.2);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid #1a3050;
+  color: #8aaccc;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 1px;
+}
+.btn-ghost:hover {
+  border-color: rgba(0, 212, 255, 0.3);
+  color: #c0d8f0;
+}
+
+/* Input styles */
+.neo-input {
+  background: #050d1a;
+  border: 1px solid #1a3050;
+  color: #e0f0ff;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.75rem;
+  outline: none;
+  border-radius: 1px;
+  transition: border-color 0.2s;
+}
+.neo-input:focus {
+  border-color: rgba(0, 212, 255, 0.5);
+  box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.1);
+}
+
+/* Section label */
+.section-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6a8aaa;
+}
+
+/* Table styles */
+.neo-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+}
+.neo-table th {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6a8aaa;
+  border-bottom: 1px solid #1a3050;
+  padding: 0.6rem 1rem;
+  text-align: left;
+  font-weight: 700;
+}
+.neo-table td {
+  padding: 0.65rem 1rem;
+  color: #b8d4f0;
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(26, 48, 80, 0.5);
+}
+.neo-table tr:hover td {
+  background: rgba(0, 212, 255, 0.03);
+}
+
+/* Divider */
+.neo-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #1a3050, transparent);
+  margin: 0;
+}

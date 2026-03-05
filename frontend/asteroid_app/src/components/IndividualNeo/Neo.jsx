@@ -1,6 +1,25 @@
 import { useState, useEffect } from "react";
 import { neoService } from "../../api/client";
 
+const DataCard = ({ label, value, sub }) => (
+  <div className="stat-card bracket" style={{ textAlign: "center" }}>
+    <div className="section-label" style={{ marginBottom: "0.4rem" }}>{label}</div>
+    <div className="font-mono-data" style={{ fontSize: "1rem", color: "#00d4ff" }}>{value}</div>
+    {sub && <div style={{ fontSize: "0.75rem", color: "#6a8aaa", marginTop: "0.2rem", fontFamily: "'Barlow', sans-serif" }}>{sub}</div>}
+  </div>
+);
+
+const SectionCard = ({ title, children }) => (
+  <div className="neo-card">
+    <div style={{ padding: "0.75rem 1.25rem", borderBottom: "1px solid #1a3050" }}>
+      <div className="font-display" style={{ fontSize: "0.82rem", color: "#6a8aaa", letterSpacing: "0.1em" }}>{title}</div>
+    </div>
+    <div style={{ padding: "1rem 1.25rem" }}>{children}</div>
+  </div>
+);
+
+const EXAMPLE_IDS = ["2000433", "3542519", "2001620", "2162038"];
+
 const Neo = () => {
   const [neoId, setNeoId] = useState("");
   const [selectedNeoId, setSelectedNeoId] = useState(null);
@@ -9,9 +28,7 @@ const Neo = () => {
   const [error, setError] = useState(null);
 
   const handleSubmit = () => {
-    if (neoId.trim()) {
-      setSelectedNeoId(neoId.trim());
-    }
+    if (neoId.trim()) setSelectedNeoId(neoId.trim());
   };
 
   const handleClose = () => {
@@ -22,17 +39,13 @@ const Neo = () => {
   };
 
   useEffect(() => {
-    if (selectedNeoId) {
-      fetchNeoDetails();
-    }
+    if (selectedNeoId) fetchNeoDetails();
   }, [selectedNeoId]);
 
   const fetchNeoDetails = async () => {
     if (!selectedNeoId) return;
-
     setLoading(true);
     setError(null);
-
     try {
       const data = await neoService.getNeoById(selectedNeoId);
       setNeoData(data);
@@ -44,86 +57,64 @@ const Neo = () => {
     }
   };
 
-  const formatDistance = (distance) => {
-    return parseFloat(distance).toLocaleString();
-  };
-
+  const formatDistance = (distance) => parseFloat(distance).toLocaleString();
   const formatDiameter = (diameterObj) => {
-    if (!diameterObj || !diameterObj.kilometers) return "Unknown";
-    const min = parseFloat(
-      diameterObj.kilometers.estimated_diameter_min || 0
-    ).toFixed(2);
-    const max = parseFloat(
-      diameterObj.kilometers.estimated_diameter_max || 0
-    ).toFixed(2);
-    return `${min} - ${max} km`;
+    if (!diameterObj?.kilometers) return "Unknown";
+    const min = parseFloat(diameterObj.kilometers.estimated_diameter_min || 0).toFixed(2);
+    const max = parseFloat(diameterObj.kilometers.estimated_diameter_max || 0).toFixed(2);
+    return `${min} – ${max} km`;
   };
+  const formatVelocity = (velocity) => parseFloat(velocity).toFixed(2);
 
-  const formatVelocity = (velocity) => {
-    return parseFloat(velocity).toFixed(2);
-  };
-
-  // Show form when no NEO is selected
+  // Search form
   if (!selectedNeoId) {
     return (
-      <div className="w-full max-w-4xl mx-auto p-4">
-        <div className="bg-white rounded-lg shadow border border-blue-200 overflow-hidden">
-          {/* Header */}
-          <div className="px-6 py-4 border-b border-blue-200">
-            <h2 className="text-xl font-bold text-gray-900">
+      <div style={{ maxWidth: "760px", margin: "0 auto", padding: "0.5rem" }}>
+        <div className="neo-card glow-cyan">
+          <div style={{ padding: "1rem 1.5rem", borderBottom: "1px solid #1a3050" }}>
+            <div className="section-label" style={{ marginBottom: "0.25rem" }}>Object Lookup</div>
+            <h2 className="font-display" style={{ fontSize: "1.2rem", color: "#e0f0ff", margin: 0, fontWeight: 700 }}>
               NEO Details Viewer
             </h2>
-            <p className="text-sm text-blue-500 mt-1">
-              Enter a Near Earth Object ID to view detailed information
+            <p style={{ color: "#4a6280", fontSize: "0.8rem", margin: "0.3rem 0 0 0", fontFamily: "'Barlow', sans-serif" }}>
+              Enter a Near Earth Object ID to retrieve detailed telemetry
             </p>
           </div>
-
-          {/* Form Content */}
-          <div className="p-6">
-            <div className="mb-6">
-              <label
-                htmlFor="neoId"
-                className="block text-blue-500 text-sm font-medium mb-2"
-              >
-                NEO ID
-              </label>
-              <div className="flex gap-3">
+          <div style={{ padding: "1.5rem" }}>
+            <div style={{ marginBottom: "1.25rem" }}>
+              <div className="section-label" style={{ marginBottom: "0.5rem" }}>NEO Reference ID</div>
+              <div style={{ display: "flex", gap: "0.5rem" }}>
                 <input
                   id="neoId"
                   type="text"
                   value={neoId}
                   onChange={(e) => setNeoId(e.target.value)}
-                  placeholder="Enter NEO ID"
-                  className="flex-1 px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter") {
-                      handleSubmit();
-                    }
-                  }}
+                  placeholder="e.g. 2000433"
+                  className="neo-input"
+                  style={{ flex: 1, fontSize: "0.9rem", padding: "0.6rem 0.9rem" }}
+                  onKeyDown={(e) => { if (e.key === "Enter") handleSubmit(); }}
                 />
                 <button
                   onClick={handleSubmit}
                   disabled={!neoId.trim()}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="btn-primary"
+                  style={{ padding: "0.6rem 1.5rem", fontSize: "0.8rem", opacity: neoId.trim() ? 1 : 0.4, cursor: neoId.trim() ? "pointer" : "not-allowed" }}
                 >
-                  Submit
+                  Search
                 </button>
               </div>
             </div>
-
-            <div className="bg-white rounded-lg shadow border border-blue-200 p-4">
-              <h3 className="text-blue-500 font-medium mb-2">
-                Try these example NEO IDs:
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {["2000433", "3542519", "2001620", "2162038"].map((id) => (
+            <div className="neo-card" style={{ padding: "0.9rem 1rem" }}>
+              <div className="section-label" style={{ marginBottom: "0.5rem" }}>Example IDs</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                {EXAMPLE_IDS.map((id) => (
                   <button
                     key={id}
-                    onClick={() => {
-                      setNeoId(id);
-                      setSelectedNeoId(id);
-                    }}
-                    className="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded text-sm font-medium transition-colors"
+                    onClick={() => { setNeoId(id); setSelectedNeoId(id); }}
+                    className="font-mono-data"
+                    style={{ background: "rgba(0,212,255,0.06)", border: "1px solid rgba(0,212,255,0.2)", color: "#00d4ff", padding: "0.3rem 0.75rem", fontSize: "0.8rem", borderRadius: "1px", cursor: "pointer", transition: "all 0.2s ease" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(0,212,255,0.12)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0,212,255,0.06)"; }}
                   >
                     {id}
                   </button>
@@ -136,63 +127,40 @@ const Neo = () => {
     );
   }
 
-  // Show loading state
   if (loading) {
     return (
-      <div className="w-full max-w-6xl mx-auto p-4">
-        <div className="bg-white rounded-lg shadow border border-blue-200 p-8">
-          <div className="animate-pulse">
-            <div className="h-6 bg-gray-200 rounded mb-4 w-1/3"></div>
-            <div className="space-y-3">
-              <div className="h-4 bg-gray-200 rounded w-full"></div>
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            </div>
+      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0.5rem" }}>
+        <div className="neo-card" style={{ padding: "2rem" }}>
+          <div style={{ height: "2px", background: "linear-gradient(90deg, #00d4ff, transparent)", marginBottom: "1.5rem", position: "relative", overflow: "hidden" }}>
+            <div className="scanner-line" style={{ position: "absolute", inset: 0, background: "rgba(0,212,255,0.6)", height: "100%" }} />
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+            {[280, 220, 180].map((w, i) => (
+              <div key={i} style={{ height: "14px", width: `${w}px`, background: "rgba(0,212,255,0.06)", borderRadius: "1px" }} />
+            ))}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.75rem", marginTop: "2rem" }}>
+            {[...Array(3)].map((_, i) => (
+              <div key={i} style={{ height: "80px", background: "rgba(0,212,255,0.04)", borderRadius: "1px" }} />
+            ))}
           </div>
         </div>
       </div>
     );
   }
 
-  // Show error state
   if (error) {
     return (
-      <div className="w-full max-w-6xl mx-auto p-4">
-        <div className="bg-white rounded-lg shadow border border-blue-200 p-8">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <svg
-                  className="h-5 w-5 text-red-400"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">
-                  Error loading NEO details
-                </h3>
-                <p className="mt-1 text-sm text-red-600">{error}</p>
-                <div className="flex gap-3 mt-3">
-                  <button
-                    onClick={fetchNeoDetails}
-                    className="bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded text-sm transition-colors"
-                  >
-                    Retry
-                  </button>
-                  <button
-                    onClick={handleClose}
-                    className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-3 py-1 rounded text-sm transition-colors"
-                  >
-                    Back to Search
-                  </button>
-                </div>
+      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0.5rem" }}>
+        <div className="neo-card" style={{ padding: "1.5rem" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+            <div style={{ color: "#ff4565", fontSize: "1.2rem" }}>⚠</div>
+            <div>
+              <div className="font-display" style={{ color: "#ff4565", fontSize: "0.8rem", marginBottom: "0.3rem" }}>Object Not Found</div>
+              <div style={{ color: "#7090b0", fontSize: "0.8rem", fontFamily: "'Share Tech Mono', monospace", marginBottom: "0.75rem" }}>{error}</div>
+              <div style={{ display: "flex", gap: "0.5rem" }}>
+                <button className="btn-primary" onClick={fetchNeoDetails}>Retry</button>
+                <button className="btn-ghost" onClick={handleClose}>Back to Search</button>
               </div>
             </div>
           </div>
@@ -201,380 +169,153 @@ const Neo = () => {
     );
   }
 
-  // Show NEO details
-  if (!neoData) {
-    return null;
-  }
+  if (!neoData) return null;
 
   const neo = neoData;
-
-  // Find the next future close approach
   const now = new Date();
-  const futureApproaches =
-    neo.close_approach_data?.filter((approach) => {
-      const approachDate = new Date(approach.close_approach_date);
-      return approachDate > now;
-    }) || [];
-
-  // If no future approaches, use the most recent past approach
-  const closeApproach =
-    futureApproaches.length > 0
-      ? futureApproaches[0] // First future approach (they should be sorted)
-      : neo.close_approach_data?.[0]; // Fallback to first approach
+  const futureApproaches = neo.close_approach_data?.filter((a) => new Date(a.close_approach_date) > now) || [];
+  const closeApproach = futureApproaches.length > 0 ? futureApproaches[0] : neo.close_approach_data?.[0];
+  const isHazardous = neo.is_potentially_hazardous_asteroid;
 
   return (
-    <div className="w-full max-w-6xl mx-auto p-4">
-      <div className="bg-white rounded-lg shadow border border-blue-200 overflow-hidden">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-blue-200 flex justify-between items-center">
-          <div>
-            <h2 className="text-xl font-bold text-gray-900">{neo.name}</h2>
-            <p className="text-sm text-blue-500">NEO Reference ID: {neo.id}</p>
-          </div>
-          <button
-            onClick={handleClose}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-          >
-            Back to Search
-          </button>
-        </div>
+    <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0.5rem" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
 
-        {/* Content */}
-        <div className="p-6 space-y-6">
-          {/* Key Status Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-              <h3 className="text-blue-500 text-sm font-medium mb-2">
-                Hazard Status
-              </h3>
-              <div className="flex items-center justify-center">
-                <span
-                  className={`inline-block w-3 h-3 rounded-full mr-2 ${
-                    neo.is_potentially_hazardous_asteroid
-                      ? "bg-red-500"
-                      : "bg-green-500"
-                  }`}
-                ></span>
-                <span
-                  className={`text-sm font-medium ${
-                    neo.is_potentially_hazardous_asteroid
-                      ? "text-red-700"
-                      : "text-green-700"
-                  }`}
+        {/* Header card */}
+        <div className="neo-card glow-cyan">
+          <div style={{ padding: "1rem 1.5rem", borderBottom: "1px solid #1a3050", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "0.75rem" }}>
+            <div>
+              <div className="section-label" style={{ marginBottom: "0.25rem" }}>Object Profile · <span className="font-mono-data" style={{ fontSize: "0.65rem" }}>{neo.id}</span></div>
+              <h2 className="font-display" style={{ fontSize: "1.3rem", color: "#e0f0ff", margin: 0, fontWeight: 700 }}>{neo.name}</h2>
+            </div>
+            <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
+              {isHazardous && (
+                <div
+                  className="pulse-threat font-display"
+                  style={{ padding: "0.3rem 0.85rem", fontSize: "0.75rem", letterSpacing: "0.1em", borderRadius: "1px", background: "rgba(255,23,68,0.12)", border: "1px solid rgba(255,23,68,0.4)", color: "#ff4565" }}
                 >
-                  {neo.is_potentially_hazardous_asteroid
-                    ? "Potentially Hazardous"
-                    : "Not Hazardous"}
-                </span>
-              </div>
-            </div>
-
-            <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-              <h3 className="text-blue-500 text-sm font-medium mb-2">
-                Size Range
-              </h3>
-              <p className="text-gray-900 text-lg font-bold">
-                {formatDiameter(neo.estimated_diameter)}
-              </p>
-              <p className="text-xs text-gray-600 mt-1">Estimated diameter</p>
-            </div>
-
-            <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-              <h3 className="text-blue-500 text-sm font-medium mb-2">
-                Time to Orbit Sun
-              </h3>
-              <p className="text-gray-900 text-lg font-bold">
-                {neo.orbital_data?.orbital_period
-                  ? `${parseFloat(neo.orbital_data.orbital_period).toFixed(
-                      1
-                    )} days`
-                  : "Unknown"}
-              </p>
-              <p className="text-xs text-gray-600 mt-1">One complete orbit</p>
+                  ▲ Potentially Hazardous
+                </div>
+              )}
+              <button className="btn-ghost" onClick={handleClose}>Back to Search</button>
             </div>
           </div>
-
-          {/* Close Approach Data */}
-          {closeApproach && (
-            <div className="bg-white rounded-lg shadow border border-blue-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                {futureApproaches.length > 0
-                  ? "Next Close Approach"
-                  : "Most Recent Close Approach"}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                  <h4 className="text-blue-500 text-sm font-medium mb-2">
-                    Approach Date
-                  </h4>
-                  <p className="text-gray-900 font-bold">
-                    {closeApproach.close_approach_date_full ||
-                      closeApproach.close_approach_date}
-                  </p>
-                  {futureApproaches.length > 0 ? (
-                    <p className="text-xs text-green-600 mt-1">
-                      Future approach
-                    </p>
-                  ) : (
-                    <p className="text-xs text-gray-600 mt-1">Past approach</p>
-                  )}
-                </div>
-                <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                  <h4 className="text-blue-500 text-sm font-medium mb-2">
-                    Miss Distance
-                  </h4>
-                  <p className="text-gray-900 font-bold">
-                    {formatDistance(closeApproach.miss_distance?.kilometers)} km
-                  </p>
-                  <p className="text-xs text-gray-600 mt-1">
-                    {parseFloat(closeApproach.miss_distance?.lunar).toFixed(2)}{" "}
-                    lunar distances
-                  </p>
-                </div>
-                <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                  <h4 className="text-blue-500 text-sm font-medium mb-2">
-                    Approach Speed
-                  </h4>
-                  <p className="text-gray-900 font-bold">
-                    {formatVelocity(
-                      closeApproach.relative_velocity?.kilometers_per_hour
-                    )}{" "}
-                    km/h
-                  </p>
-                  <p className="text-xs text-gray-600 mt-1">
-                    Relative to {closeApproach.orbiting_body}
-                  </p>
-                </div>
-                <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                  <h4 className="text-blue-500 text-sm font-medium mb-2">
-                    Approaching
-                  </h4>
-                  <p className="text-gray-900 font-bold">
-                    {closeApproach.orbiting_body}
-                  </p>
-                  <p className="text-xs text-gray-600 mt-1">
-                    Planet being approached
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Physical Characteristics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-lg shadow border border-blue-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Physical Properties
-              </h3>
-              <div className="space-y-4">
-                <div className="bg-white p-4 rounded-lg shadow border border-blue-200">
-                  <h4 className="text-blue-500 text-sm font-medium mb-1">
-                    Absolute Magnitude
-                  </h4>
-                  <p className="text-gray-900 font-bold">
-                    {neo.absolute_magnitude_h}
-                  </p>
-                </div>
-                <div className="bg-white p-4 rounded-lg shadow border border-blue-200">
-                  <h4 className="text-blue-500 text-sm font-medium mb-1">
-                    Diameter (km)
-                  </h4>
-                  <p className="text-gray-900 font-bold">
-                    {formatDiameter(neo.estimated_diameter)}
-                  </p>
-                </div>
-                {neo.estimated_diameter?.meters && (
-                  <div className="bg-white p-4 rounded-lg shadow border border-blue-200">
-                    <h4 className="text-blue-500 text-sm font-medium mb-1">
-                      Diameter (m)
-                    </h4>
-                    <p className="text-gray-900 font-bold">
-                      {formatDiameter(neo.estimated_diameter.meters)} m
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow border border-blue-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Classification
-              </h3>
-              <div className="space-y-4">
-                <div className="bg-white p-4 rounded-lg shadow border border-blue-200">
-                  <h4 className="text-blue-500 text-sm font-medium mb-1">
-                    NEO Reference ID
-                  </h4>
-                  <p className="text-gray-900 font-bold">
-                    {neo.neo_reference_id}
-                  </p>
-                </div>
-                <div className="bg-white p-4 rounded-lg shadow border border-blue-200">
-                  <h4 className="text-blue-500 text-sm font-medium mb-1">
-                    NASA JPL URL
-                  </h4>
-                  <a
-                    href={neo.nasa_jpl_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 underline font-medium"
-                  >
-                    View on NASA JPL
-                  </a>
-                </div>
-              </div>
-            </div>
+          <div style={{ padding: "1rem 1.5rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.75rem" }}>
+            <DataCard
+              label="Hazard Status"
+              value={isHazardous ? "Hazardous" : "Safe"}
+              sub={isHazardous ? "NASA Classified PHA" : "No significant risk"}
+            />
+            <DataCard
+              label="Size Range"
+              value={formatDiameter(neo.estimated_diameter)}
+              sub="Estimated diameter"
+            />
+            <DataCard
+              label="Orbital Period"
+              value={neo.orbital_data?.orbital_period ? `${parseFloat(neo.orbital_data.orbital_period).toFixed(1)} days` : "Unknown"}
+              sub="One complete orbit"
+            />
           </div>
-
-          {/* Orbital Data */}
-          {neo.orbital_data && (
-            <div className="bg-white rounded-lg shadow border border-blue-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Orbital Characteristics
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {neo.orbital_data.orbital_period && (
-                  <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                    <h4 className="text-blue-500 text-sm font-medium mb-2">
-                      Orbital Period
-                    </h4>
-                    <p className="text-gray-900 font-bold">
-                      {parseFloat(neo.orbital_data.orbital_period).toFixed(1)}{" "}
-                      days
-                    </p>
-                  </div>
-                )}
-                {neo.orbital_data.minimum_orbit_intersection && (
-                  <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                    <h4 className="text-blue-500 text-sm font-medium mb-2">
-                      Min Orbit Intersection
-                    </h4>
-                    <p className="text-gray-900 font-bold">
-                      {parseFloat(
-                        neo.orbital_data.minimum_orbit_intersection
-                      ).toFixed(6)}{" "}
-                      AU
-                    </p>
-                  </div>
-                )}
-                {neo.orbital_data.eccentricity && (
-                  <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                    <h4 className="text-blue-500 text-sm font-medium mb-2">
-                      Eccentricity
-                    </h4>
-                    <p className="text-gray-900 font-bold">
-                      {parseFloat(neo.orbital_data.eccentricity).toFixed(6)}
-                    </p>
-                  </div>
-                )}
-                {neo.orbital_data.semi_major_axis && (
-                  <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                    <h4 className="text-blue-500 text-sm font-medium mb-2">
-                      Semi-major Axis
-                    </h4>
-                    <p className="text-gray-900 font-bold">
-                      {parseFloat(neo.orbital_data.semi_major_axis).toFixed(6)}{" "}
-                      AU
-                    </p>
-                  </div>
-                )}
-                {neo.orbital_data.inclination && (
-                  <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                    <h4 className="text-blue-500 text-sm font-medium mb-2">
-                      Inclination
-                    </h4>
-                    <p className="text-gray-900 font-bold">
-                      {parseFloat(neo.orbital_data.inclination).toFixed(2)}°
-                    </p>
-                  </div>
-                )}
-                {neo.orbital_data.ascending_node_longitude && (
-                  <div className="bg-white p-4 rounded-lg shadow border border-blue-200 text-center">
-                    <h4 className="text-blue-500 text-sm font-medium mb-2">
-                      Ascending Node
-                    </h4>
-                    <p className="text-gray-900 font-bold">
-                      {parseFloat(
-                        neo.orbital_data.ascending_node_longitude
-                      ).toFixed(2)}
-                      °
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* All Close Approaches */}
-          {neo.close_approach_data && neo.close_approach_data.length > 1 && (
-            <div className="bg-white rounded-lg shadow border border-blue-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                All Recorded Close Approaches
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Historical and predicted close encounters with planets as this
-                asteroid orbits the Sun
-              </p>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-blue-200">
-                      <th className="text-left py-3 px-4 text-blue-500 font-medium">
-                        Approach Date
-                      </th>
-                      <th className="text-left py-3 px-4 text-blue-500 font-medium">
-                        Miss Distance (km)
-                      </th>
-                      <th className="text-left py-3 px-4 text-blue-500 font-medium">
-                        Approach Speed (km/h)
-                      </th>
-                      <th className="text-left py-3 px-4 text-blue-500 font-medium">
-                        Planet Approached
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {neo.close_approach_data.map((approach, index) => (
-                      <tr key={index} className="border-b border-blue-100">
-                        <td className="py-3 px-4 text-gray-900">
-                          {approach.close_approach_date}
-                        </td>
-                        <td className="py-3 px-4 text-gray-900">
-                          {formatDistance(approach.miss_distance?.kilometers)}
-                        </td>
-                        <td className="py-3 px-4 text-gray-900">
-                          {formatVelocity(
-                            approach.relative_velocity?.kilometers_per_hour
-                          )}
-                        </td>
-                        <td className="py-3 px-4 text-gray-900">
-                          {approach.orbiting_body}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* Footer */}
-        <div className="px-6 py-3 border-t border-blue-200">
-          <div className="flex flex-col sm:flex-row gap-3 justify-between items-center">
-            <button
-              onClick={fetchNeoDetails}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              Refresh Data
-            </button>
-            <button
-              onClick={handleClose}
-              className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-            >
-              Back to Search
-            </button>
-          </div>
+        {/* Close Approach */}
+        {closeApproach && (
+          <SectionCard title={futureApproaches.length > 0 ? "Next Close Approach" : "Most Recent Close Approach"}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "0.75rem" }}>
+              <DataCard label="Approach Date" value={closeApproach.close_approach_date_full || closeApproach.close_approach_date} sub={futureApproaches.length > 0 ? "Future approach" : "Past approach"} />
+              <DataCard label="Miss Distance" value={`${formatDistance(closeApproach.miss_distance?.kilometers)} km`} sub={`${parseFloat(closeApproach.miss_distance?.lunar).toFixed(2)} lunar dist.`} />
+              <DataCard label="Approach Speed" value={`${formatVelocity(closeApproach.relative_velocity?.kilometers_per_hour)} km/h`} sub={`Relative to ${closeApproach.orbiting_body}`} />
+              <DataCard label="Approaching" value={closeApproach.orbiting_body} sub="Planet being approached" />
+            </div>
+          </SectionCard>
+        )}
+
+        {/* Physical + Classification */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+          <SectionCard title="Physical Properties">
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              <DataCard label="Absolute Magnitude" value={neo.absolute_magnitude_h} />
+              <DataCard label="Diameter (km)" value={formatDiameter(neo.estimated_diameter)} />
+              {neo.estimated_diameter?.meters && (
+                <DataCard label="Diameter (m)" value={`${parseFloat(neo.estimated_diameter.meters.estimated_diameter_min).toFixed(0)} – ${parseFloat(neo.estimated_diameter.meters.estimated_diameter_max).toFixed(0)} m`} />
+              )}
+            </div>
+          </SectionCard>
+          <SectionCard title="Classification">
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              <DataCard label="NEO Reference ID" value={neo.neo_reference_id} />
+              <div className="stat-card bracket">
+                <div className="section-label" style={{ marginBottom: "0.35rem" }}>NASA JPL</div>
+                <a
+                  href={neo.nasa_jpl_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono-data"
+                  style={{ fontSize: "0.8rem", color: "#00d4ff", textDecoration: "none" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.7"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
+                >
+                  View on NASA JPL →
+                </a>
+              </div>
+            </div>
+          </SectionCard>
+        </div>
+
+        {/* Orbital Data */}
+        {neo.orbital_data && (
+          <SectionCard title="Orbital Characteristics">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "0.6rem" }}>
+              {[
+                neo.orbital_data.orbital_period && { l: "Orbital Period", v: `${parseFloat(neo.orbital_data.orbital_period).toFixed(1)} days` },
+                neo.orbital_data.minimum_orbit_intersection && { l: "Min Orbit Intersection", v: `${parseFloat(neo.orbital_data.minimum_orbit_intersection).toFixed(6)} AU` },
+                neo.orbital_data.eccentricity && { l: "Eccentricity", v: parseFloat(neo.orbital_data.eccentricity).toFixed(6) },
+                neo.orbital_data.semi_major_axis && { l: "Semi-major Axis", v: `${parseFloat(neo.orbital_data.semi_major_axis).toFixed(6)} AU` },
+                neo.orbital_data.inclination && { l: "Inclination", v: `${parseFloat(neo.orbital_data.inclination).toFixed(2)}°` },
+                neo.orbital_data.ascending_node_longitude && { l: "Ascending Node", v: `${parseFloat(neo.orbital_data.ascending_node_longitude).toFixed(2)}°` },
+              ].filter(Boolean).map(({ l, v }) => (
+                <DataCard key={l} label={l} value={v} />
+              ))}
+            </div>
+          </SectionCard>
+        )}
+
+        {/* All Close Approaches Table */}
+        {neo.close_approach_data?.length > 1 && (
+          <SectionCard title="All Recorded Close Approaches">
+            <p style={{ color: "#4a6280", fontSize: "0.75rem", margin: "0 0 0.75rem 0", fontFamily: "'Barlow', sans-serif" }}>
+              Historical and predicted close encounters as this asteroid orbits the Sun
+            </p>
+            <div style={{ overflowX: "auto" }}>
+              <table className="neo-table">
+                <thead>
+                  <tr>
+                    <th>Approach Date</th>
+                    <th>Miss Distance (km)</th>
+                    <th>Speed (km/h)</th>
+                    <th>Planet</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {neo.close_approach_data.map((approach, index) => (
+                    <tr key={index}>
+                      <td>{approach.close_approach_date}</td>
+                      <td>{formatDistance(approach.miss_distance?.kilometers)}</td>
+                      <td>{formatVelocity(approach.relative_velocity?.kilometers_per_hour)}</td>
+                      <td>{approach.orbiting_body}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </SectionCard>
+        )}
+
+        {/* Footer actions */}
+        <div style={{ display: "flex", gap: "0.5rem", paddingBottom: "0.5rem" }}>
+          <button className="btn-primary" onClick={fetchNeoDetails}>Refresh Data</button>
+          <button className="btn-ghost" onClick={handleClose}>Back to Search</button>
         </div>
       </div>
     </div>

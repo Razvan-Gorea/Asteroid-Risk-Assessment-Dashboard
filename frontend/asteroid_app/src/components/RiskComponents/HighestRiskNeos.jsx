@@ -1,14 +1,21 @@
 import { useState, useEffect } from "react";
 import { neoRiskService } from "../../api/client";
 
+const RISK_STYLES = {
+  CRITICAL: { bg: "rgba(255,23,68,0.1)",  border: "rgba(255,23,68,0.3)",  badge: "badge-critical" },
+  HIGH:     { bg: "rgba(255,109,0,0.08)", border: "rgba(255,109,0,0.3)",  badge: "badge-high" },
+  MODERATE: { bg: "rgba(255,214,0,0.06)", border: "rgba(255,214,0,0.25)", badge: "badge-moderate" },
+  LOW:      { bg: "rgba(0,176,255,0.06)", border: "rgba(0,176,255,0.25)", badge: "badge-low" },
+  MINIMAL:  { bg: "rgba(0,230,118,0.06)", border: "rgba(0,230,118,0.2)", badge: "badge-minimal" },
+};
+
+const getRisk = (level) =>
+  RISK_STYLES[level] || { bg: "rgba(70,90,120,0.08)", border: "#1a3050", badge: "" };
+
 const HighestRiskNeos = ({ selectedDate = null, limit = 10 }) => {
-  // Get today's date once
   const today = new Date().toISOString().split("T")[0];
 
-  // Initialize state with proper fallback
-  const [currentDate, setCurrentDate] = useState(() => {
-    return selectedDate || today;
-  });
+  const [currentDate, setCurrentDate] = useState(() => selectedDate || today);
   const [riskData, setRiskData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,13 +25,7 @@ const HighestRiskNeos = ({ selectedDate = null, limit = 10 }) => {
     try {
       setIsLoading(true);
       setError(null);
-
-      const data = await neoRiskService.getHighestRiskNeos(
-        currentDate,
-        currentDate,
-        limit
-      );
-
+      const data = await neoRiskService.getHighestRiskNeos(currentDate, currentDate, limit);
       setRiskData(data);
     } catch (err) {
       setError(err.message);
@@ -33,73 +34,28 @@ const HighestRiskNeos = ({ selectedDate = null, limit = 10 }) => {
     }
   };
 
-  const handleDateChange = (event) => {
-    setCurrentDate(event.target.value);
-  };
-
-  const resetToToday = () => {
-    setCurrentDate(today);
-  };
-
-  // Effects
   useEffect(() => {
-    if (selectedDate) {
-      setCurrentDate(selectedDate);
-    }
+    if (selectedDate) setCurrentDate(selectedDate);
   }, [selectedDate]);
 
   useEffect(() => {
-    if (currentDate) {
-      fetchHighestRiskNeos();
-    }
+    if (currentDate) fetchHighestRiskNeos();
   }, [currentDate, limit]);
 
   useEffect(() => {
     setShowAll(false);
   }, [currentDate]);
 
-  const getRiskColorClass = (riskLevel) => {
-    switch (riskLevel) {
-      case "CRITICAL":
-        return "bg-red-500 text-white";
-      case "HIGH":
-        return "bg-orange-500 text-white";
-      case "MODERATE":
-        return "bg-yellow-500 text-white";
-      case "LOW":
-        return "bg-blue-500 text-white";
-      case "MINIMAL":
-        return "bg-green-500 text-white";
-      default:
-        return "bg-gray-500 text-white";
-    }
-  };
-
-  const getRiskBgColor = (riskLevel) => {
-    switch (riskLevel) {
-      case "CRITICAL":
-        return "bg-red-50 border-red-200";
-      case "HIGH":
-        return "bg-orange-50 border-orange-200";
-      case "MODERATE":
-        return "bg-yellow-50 border-yellow-200";
-      case "LOW":
-        return "bg-blue-50 border-blue-200";
-      case "MINIMAL":
-        return "bg-green-50 border-green-200";
-      default:
-        return "bg-gray-50 border-gray-200";
-    }
-  };
-
   if (isLoading) {
     return (
-      <div className="w-full p-4">
-        <div className="bg-white rounded-lg shadow border border-blue-200 p-6 animate-pulse">
-          <div className="h-6 bg-gray-200 rounded mb-4 w-1/3"></div>
-          <div className="space-y-3">
+      <div className="w-full p-2">
+        <div className="neo-card" style={{ padding: "1.25rem" }}>
+          <div style={{ height: "2px", background: "linear-gradient(90deg, #00d4ff, transparent)", marginBottom: "1rem", position: "relative", overflow: "hidden" }}>
+            <div className="scanner-line" style={{ position: "absolute", inset: 0, background: "rgba(0,212,255,0.6)", height: "100%" }} />
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="h-16 bg-gray-200 rounded"></div>
+              <div key={i} style={{ height: "72px", background: "rgba(0,212,255,0.04)", borderRadius: "1px" }} />
             ))}
           </div>
         </div>
@@ -109,33 +65,14 @@ const HighestRiskNeos = ({ selectedDate = null, limit = 10 }) => {
 
   if (error) {
     return (
-      <div className="w-full p-4">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <svg
-                className="h-5 w-5 text-red-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-            <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800">
-                Error loading highest risk data
-              </h3>
-              <p className="mt-1 text-sm text-red-600">{error}</p>
-              <button
-                onClick={fetchHighestRiskNeos}
-                className="mt-2 bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded text-sm transition-colors"
-              >
-                Retry
-              </button>
+      <div className="w-full p-2">
+        <div className="neo-card" style={{ padding: "1.25rem" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+            <div style={{ color: "#ff4565", fontSize: "1.2rem" }}>⚠</div>
+            <div>
+              <div className="font-display" style={{ color: "#ff4565", fontSize: "0.8rem", marginBottom: "0.3rem" }}>Data Acquisition Failed</div>
+              <div style={{ color: "#7090b0", fontSize: "0.75rem", fontFamily: "'Share Tech Mono', monospace", marginBottom: "0.75rem" }}>{error}</div>
+              <button className="btn-primary" onClick={fetchHighestRiskNeos}>Retry</button>
             </div>
           </div>
         </div>
@@ -143,187 +80,120 @@ const HighestRiskNeos = ({ selectedDate = null, limit = 10 }) => {
     );
   }
 
-  if (
-    !riskData ||
-    !riskData.highest_risk_neos ||
-    riskData.highest_risk_neos.length === 0
-  ) {
+  if (!riskData?.highest_risk_neos?.length) {
     return (
-      <div className="w-full p-4">
-        <div className="bg-gray-50 rounded-lg p-6 text-center">
-          <p className="text-gray-600">
-            No highest risk NEO data available for {currentDate}
-          </p>
-          <button
-            onClick={fetchHighestRiskNeos}
-            className="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors"
-          >
-            Retry
-          </button>
+      <div className="w-full p-2">
+        <div className="neo-card" style={{ padding: "2rem", textAlign: "center" }}>
+          <div className="section-label" style={{ marginBottom: "0.5rem" }}>No threat data for {currentDate}</div>
+          <button className="btn-primary" onClick={fetchHighestRiskNeos}>Retry</button>
         </div>
       </div>
     );
   }
 
   const { highest_risk_neos } = riskData;
-
-  // Calculate display variables
-  const hasMoreThanFive = highest_risk_neos.length > 5;
-  const displayNeos = showAll
-    ? highest_risk_neos
-    : highest_risk_neos.slice(0, 5);
+  const hasMore = highest_risk_neos.length > 5;
+  const displayNeos = showAll ? highest_risk_neos : highest_risk_neos.slice(0, 5);
 
   return (
-    <div className="w-full p-4">
-      <div className="bg-white rounded-lg shadow border border-blue-200 overflow-hidden">
-        <div className="px-4 py-3 border-b border-blue-200">
-          <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-bold text-gray-900">
-              {currentDate === today ? "Today's" : ""} Highest Risk NEOs
+    <div className="w-full p-2">
+      <div className="neo-card glow-cyan" style={{ display: "flex", flexDirection: "column" }}>
+        {/* Header */}
+        <div style={{ padding: "1rem 1.25rem", borderBottom: "1px solid #1a3050", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "0.75rem" }}>
+          <div>
+            <div className="section-label" style={{ marginBottom: "0.2rem" }}>Ranked Objects</div>
+            <h2 className="font-display" style={{ fontSize: "1.1rem", color: "#e0f0ff", margin: 0, fontWeight: 700 }}>
+              Highest Risk NEOs
             </h2>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-              <div className="text-xs text-blue-500">
-                {new Date(currentDate).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </div>
-              <div className="flex gap-1">
-                <input
-                  type="date"
-                  value={currentDate}
-                  onChange={handleDateChange}
-                  className="px-2 py-1 text-xs border border-blue-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-                <button
-                  onClick={resetToToday}
-                  className="px-2 py-1 text-xs bg-blue-100 hover:bg-blue-200 text-blue-600 rounded transition-colors"
-                >
-                  Today
-                </button>
-              </div>
-            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+            <span className="font-mono-data" style={{ fontSize: "0.7rem", color: "#4a6280" }}>
+              {new Date(currentDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+            </span>
+            <input
+              type="date"
+              value={currentDate}
+              onChange={(e) => setCurrentDate(e.target.value)}
+              className="neo-input"
+              style={{ fontSize: "0.7rem", padding: "0.3rem 0.6rem" }}
+            />
+            <button className="btn-ghost" onClick={() => setCurrentDate(today)} style={{ padding: "0.3rem 0.75rem" }}>Today</button>
           </div>
         </div>
 
-        {/* Summary */}
-        <div className="px-4 py-2 bg-gray-50 border-b border-blue-200">
-          <p className="text-xs text-gray-600">
-            Showing {displayNeos.length} of {highest_risk_neos.length} highest
-            risk asteroids
-          </p>
+        {/* Count bar */}
+        <div style={{ padding: "0.4rem 1.25rem", borderBottom: "1px solid #1a3050", background: "#050d1a" }}>
+          <span className="section-label">
+            Showing {displayNeos.length} of {highest_risk_neos.length} tracked asteroids
+          </span>
         </div>
 
-        {/* NEOs List */}
-        <div className="p-4">
-          <div className="space-y-3">
-            {displayNeos.map((neo, index) => (
+        {/* NEO List */}
+        <div style={{ padding: "0.75rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.5rem", flex: 1 }}>
+          {displayNeos.map((neo, index) => {
+            const rs = getRisk(neo.risk_level);
+            const isCritical = neo.risk_level === "CRITICAL";
+            return (
               <div
                 key={neo.id}
-                className={`p-3 rounded border ${getRiskBgColor(
-                  neo.risk_level
-                )}`}
+                style={{ background: rs.bg, border: `1px solid ${rs.border}`, borderRadius: "1px", padding: "0.65rem 0.85rem" }}
               >
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs font-medium text-gray-500">
-                    #{index + 1}
+                <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.5rem", flexWrap: "wrap" }}>
+                  <span className="font-mono-data" style={{ fontSize: "0.78rem", color: "#6a8aaa", flexShrink: 0 }}>
+                    #{String(index + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="font-medium text-gray-900 text-sm truncate flex-1">
-                    {neo.name}
-                  </h3>
                   <span
-                    className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${getRiskColorClass(
-                      neo.risk_level
-                    )}`}
+                    className="font-display"
+                    style={{ fontSize: "0.92rem", color: "#e0f0ff", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", letterSpacing: "0.04em" }}
+                  >
+                    {neo.name}
+                  </span>
+                  <span
+                    className={`${rs.badge} ${isCritical ? "pulse-threat" : ""} font-display`}
+                    style={{ padding: "0.2rem 0.6rem", fontSize: "0.75rem", letterSpacing: "0.08em", borderRadius: "1px", whiteSpace: "nowrap" }}
                   >
                     {neo.risk_level}
                   </span>
                 </div>
 
-                {/* Compact metrics */}
-                <div className="grid grid-cols-2 gap-2 mb-2">
-                  <div className="bg-white p-2 rounded border border-blue-200">
-                    <h4 className="text-blue-500 text-xs font-medium">Risk Score</h4>
-                    <p className="text-gray-900 text-sm font-bold">
-                      {neo.risk_score}/100
-                    </p>
-                  </div>
-                  <div className="bg-white p-2 rounded border border-blue-200">
-                    <h4 className="text-blue-500 text-xs font-medium">
-                      Size (Diameter)
-                    </h4>
-                    <p className="text-gray-900 text-sm font-bold">
-                      {neo.size_km.toFixed(2)} km
-                    </p>
-                  </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0.35rem" }}>
+                  {[
+                    { l: "Score",    v: `${neo.risk_score}/100` },
+                    { l: "Size",     v: `${neo.size_km.toFixed(2)} km` },
+                    { l: "Distance", v: `${neo.miss_distance_lunar} LD` },
+                    { l: "Velocity", v: `${(neo.velocity_kmh / 1000).toFixed(0)}k km/h` },
+                  ].map(({ l, v }) => (
+                    <div key={l} style={{ background: "rgba(3,8,16,0.5)", border: "1px solid rgba(26,48,80,0.5)", padding: "0.4rem 0.5rem", borderRadius: "1px" }}>
+                      <div className="section-label" style={{ marginBottom: "0.15rem" }}>{l}</div>
+                      <div className="font-mono-data" style={{ fontSize: "0.85rem", color: "#00d4ff" }}>{v}</div>
+                    </div>
+                  ))}
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="bg-white p-2 rounded border border-blue-200">
-                    <h4 className="text-blue-500 text-xs font-medium">
-                      Distance (Lunar Distance)
-                    </h4>
-                    <p className="text-gray-900 text-sm font-bold">
-                      {neo.miss_distance_lunar} LD
-                    </p>
-                  </div>
-                  <div className="bg-white p-2 rounded border border-blue-200">
-                    <h4 className="text-blue-500 text-xs font-medium">
-                      Velocity
-                    </h4>
-                    <p className="text-gray-900 text-sm font-bold">
-                      {(neo.velocity_kmh / 1000).toFixed(0)}k km/h
-                    </p>
-                  </div>
-                </div>
-
-                {/* NASA Hazardous warning */}
                 {neo.is_nasa_hazardous && (
-                  <div className="flex items-center mt-2 p-2 bg-red-50 rounded border border-red-200">
-                    <svg
-                      className="h-3 w-3 text-red-500 mr-1"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-xs font-medium text-red-700">
-                      NASA Hazardous
-                    </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginTop: "0.4rem" }}>
+                    <span style={{ color: "#ff4565", fontSize: "0.85rem" }}>▲</span>
+                    <span className="font-display" style={{ fontSize: "0.75rem", color: "#ff4565", letterSpacing: "0.08em" }}>NASA Hazardous</span>
                   </div>
                 )}
               </div>
-            ))}
-          </div>
+            );
+          })}
 
-          {/* Show More/Show Less Button */}
-          {hasMoreThanFive && (
-            <div className="mt-4 text-center">
-              <button
-                onClick={() => setShowAll(!showAll)}
-                className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded border border-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {showAll
-                  ? `Show Less`
-                  : `Show More (${highest_risk_neos.length - 5} more)`}
-              </button>
-            </div>
+          {hasMore && (
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className="btn-ghost"
+              style={{ width: "100%", padding: "0.5rem", marginTop: "0.25rem" }}
+            >
+              {showAll ? "Show Less" : `Show ${highest_risk_neos.length - 5} More`}
+            </button>
           )}
         </div>
 
-        {/* Refresh Button */}
-        <div className="px-4 py-2 border-t border-blue-200">
-          <button
-            onClick={fetchHighestRiskNeos}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            Refresh
-          </button>
+        {/* Footer */}
+        <div style={{ padding: "0.75rem 1.25rem", borderTop: "1px solid #1a3050" }}>
+          <button className="btn-primary" onClick={fetchHighestRiskNeos} style={{ width: "100%" }}>Refresh</button>
         </div>
       </div>
     </div>
